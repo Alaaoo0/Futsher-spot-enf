@@ -1,0 +1,3480 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0d1117">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="كاشف V13">
+<title>كاشف الانفجار V13 — Spot + Futures</title>
+<link rel="manifest" href="data:application/manifest+json,{%22name%22:%22%D9%83%D8%A7%D8%B4%D9%81%20%D8%A7%D9%84%D8%A7%D9%86%D9%81%D8%AC%D8%A7%D8%B1%20V13%22,%22short_name%22:%22V13%22,%22start_url%22:%22.%22,%22display%22:%22standalone%22,%22background_color%22:%22%230d1117%22,%22theme_color%22:%22%230d1117%22,%22icons%22:[{%22src%22:%22data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20viewBox=%270%200%20192%20192%27%3E%3Crect%20width=%27192%27%20height=%27192%27%20rx=%2740%27%20fill=%27%230d1117%27/%3E%3Ctext%20x=%2796%27%20y=%27120%27%20font-size=%2796%27%20text-anchor=%27middle%27%3E%F0%9F%9A%80%3C/text%3E%3C/svg%3E%22,%22sizes%22:%22192x192%22,%22type%22:%22image/svg+xml%22}]}">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Tahoma, sans-serif; background: #0d1117; color: #e6edf3; padding: 12px; min-height: 100vh; overflow-x: hidden; }
+  h1 { font-size: 17px; text-align: center; margin-bottom: 6px; color: #f0b90b; }
+  .subtitle { text-align: center; font-size: 11px; color: #8b949e; margin-bottom: 14px; }
+  .v13-badge { display: inline-block; background: linear-gradient(135deg,#f0b90b,#f85149); color: #0d1117; font-size: 10px; padding: 3px 10px; border-radius: 20px; font-weight: bold; margin-right: 6px; }
+  .pump-badge { display: inline-block; background: linear-gradient(135deg,#f85149,#a371f7); color: white; font-size: 10px; padding: 3px 8px; border-radius: 20px; font-weight: bold; margin-right: 4px; animation: pumpPulse 1s infinite; }
+  @keyframes pumpPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.7; } }
+  .tabs { display: flex; gap: 4px; margin-bottom: 12px; background: #161b22; padding: 4px; border-radius: 10px; border: 1px solid #30363d; overflow-x: auto; }
+  .tab { flex: 1; padding: 10px 4px; text-align: center; border-radius: 8px; font-size: 11px; cursor: pointer; font-weight: 500; color: #8b949e; white-space: nowrap; }
+  .tab.active { background: #f0b90b; color: #0d1117; font-weight: bold; }
+  .controls { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+  select, button, input { flex: 1; min-width: 100px; padding: 12px 10px; border-radius: 8px; border: 1px solid #30363d; background: #161b22; color: #e6edf3; font-size: 13px; font-family: inherit; }
+  input::placeholder { color: #6e7681; }
+  button { background: #f0b90b; border-color: #f0b90b; color: #0d1117; font-weight: bold; cursor: pointer; }
+  button:disabled { opacity: 0.5; cursor: not-allowed; }
+  .radar-btn { background: linear-gradient(135deg, #f0b90b, #f85149); border: none; color: white; }
+  .analyze-btn { background: linear-gradient(135deg, #238636, #3fb950); border: none; color: white; }
+  .explode-btn { background: linear-gradient(135deg, #3fb950, #58a6ff); border: none; color: white; font-size: 14px; padding: 16px; animation: glow 2s infinite; }
+  .explode-btn:disabled { animation: none; opacity: 0.6; }
+  @keyframes glow { 0%,100% { box-shadow: 0 0 8px #3fb950; } 50% { box-shadow: 0 0 24px #58a6ff; } }
+  .early-btn { background: linear-gradient(135deg, #3fb950, #a371f7); border: none; color: white; font-size: 14px; padding: 16px; font-weight: bold; animation: glowEarly 2s infinite; }
+  @keyframes glowEarly { 0%,100% { box-shadow: 0 0 8px #3fb950; } 50% { box-shadow: 0 0 24px #a371f7; } }
+  .early-btn:disabled { animation: none; opacity: 0.6; }
+  .pump-btn { background: linear-gradient(135deg, #f85149, #f0b90b); border: none; color: white; font-size: 14px; padding: 16px; font-weight: bold; animation: pumpGlow 1.5s infinite; }
+  @keyframes pumpGlow { 0%,100% { box-shadow: 0 0 10px #f85149; } 50% { box-shadow: 0 0 30px #f0b90b; } }
+  .pump-btn:disabled { animation: none; opacity: 0.6; }
+  .stop-btn { background: linear-gradient(135deg, #f85149, #d29922); border: none; color: white; font-size: 14px; padding: 16px; font-weight: bold; }
+  .advice-btn { background: linear-gradient(135deg, #229ED9, #a371f7); border: none; color: white; font-size: 14px; padding: 16px; font-weight: bold; }
+  .install-btn { background: linear-gradient(135deg, #3fb950, #229ED9); border: none; color: white; font-size: 13px; padding: 12px; border-radius: 8px; font-weight: bold; width: 100%; margin-bottom: 10px; display: none; }
+  .install-btn.show { display: block; animation: installPulse 2s infinite; }
+  @keyframes installPulse { 0%,100% { box-shadow: 0 0 5px #3fb950; } 50% { box-shadow: 0 0 20px #229ED9; } }
+  .single-search-box { background: #161b22; border: 2px solid #3fb950; border-radius: 10px; padding: 12px; margin-bottom: 12px; }
+  .single-search-title { font-size: 13px; font-weight: bold; color: #3fb950; margin-bottom: 8px; }
+  .single-search-row { display: flex; gap: 6px; }
+  .single-search-row input { flex: 3; font-size: 14px; font-weight: bold; text-transform: uppercase; }
+  .single-search-row button { flex: 1; font-size: 12px; }
+  .status { text-align: center; font-size: 13px; padding: 10px; border-radius: 8px; margin-bottom: 12px; display: none; }
+  .status.loading { background: #1f6feb22; color: #58a6ff; display: block; }
+  .status.error { background: #f8514922; color: #f85149; display: block; }
+  .status.success { background: #23863622; color: #3fb950; display: block; }
+  .status.explode { background: linear-gradient(135deg, #a371f722, #f8514922); color: #a371f7; display: block; border: 1px solid #a371f7; font-weight: bold; }
+  .status.early { background: linear-gradient(135deg, #3fb95022, #a371f722); color: #3fb950; display: block; border: 1px solid #3fb950; font-weight: bold; }
+  .status.pump { background: linear-gradient(135deg, #f8514922, #f0b90b22); color: #f85149; display: block; border: 2px solid #f85149; font-weight: bold; animation: pumpStatusPulse 1s infinite; }
+  @keyframes pumpStatusPulse { 0%,100% { box-shadow: 0 0 5px #f85149; } 50% { box-shadow: 0 0 20px #f0b90b; } }
+  .status.cooldown { background: linear-gradient(135deg, #d2992222, #f8514922); color: #d29922; display: block; border: 1px solid #d29922; font-weight: bold; }
+  .status.stopped { background: linear-gradient(135deg, #f8514922, #d2992222); color: #f85149; display: block; border: 1px solid #f85149; font-weight: bold; }
+  
+  .mode-switch { display: flex; gap: 6px; margin-bottom: 12px; padding: 6px; background: #161b22; border-radius: 10px; border: 1px solid #30363d; flex-wrap: wrap; }
+  .mode-btn { flex: 1; min-width: 85px; padding: 10px 4px; text-align: center; border-radius: 8px; font-size: 10px; cursor: pointer; font-weight: bold; color: #8b949e; background: transparent; border: 2px solid transparent; }
+  .mode-btn.active-buy { background: linear-gradient(135deg,#3fb950,#58a6ff); color: white; border-color: #3fb950; }
+  .mode-btn.active-sell { background: linear-gradient(135deg,#f85149,#a371f7); color: white; border-color: #f85149; }
+  .mode-btn.active-early { background: linear-gradient(135deg,#3fb950,#a371f7); color: white; border-color: #a371f7; animation: glowEarly 2s infinite; }
+  .mode-btn.active-fbuy { background: linear-gradient(135deg,#3fb950,#58a6ff); color: white; border-color: #3fb950; }
+  .mode-btn.active-fsell { background: linear-gradient(135deg,#f85149,#a371f7); color: white; border-color: #f85149; }
+  .mode-btn.active-pump { background: linear-gradient(135deg,#f85149,#f0b90b); color: white; border-color: #f0b90b; animation: pumpGlow 1.5s infinite; }
+  
+  .market-switch { display: flex; gap: 6px; margin-bottom: 10px; padding: 4px; background: #161b22; border-radius: 10px; border: 1px solid #30363d; }
+  .market-btn { flex: 1; padding: 10px; text-align: center; border-radius: 8px; font-size: 12px; cursor: pointer; font-weight: bold; color: #8b949e; background: transparent; border: none; }
+  .market-btn.active-spot { background: linear-gradient(135deg,#3fb950,#58a6ff); color: white; }
+  .market-btn.active-futures { background: linear-gradient(135deg,#f0b90b,#f85149); color: white; }
+  
+  .token { background: #161b22; border: 1px solid #30363d; border-radius: 10px; padding: 12px; margin-bottom: 10px; }
+  .token.radar { border: 2px solid #f0b90b; }
+  .token.single { border: 2px solid #3fb950; }
+  .token.explode { border: 2px solid #a371f7; background: linear-gradient(180deg, #a371f722 0%, #161b22 100%); box-shadow: 0 0 25px #a371f755; }
+  .token.explode.ultra { border-color: #f85149; box-shadow: 0 0 35px #f8514999; }
+  .token.explode.elite { border-color: #3fb950; box-shadow: 0 0 40px #3fb950aa; background: linear-gradient(180deg, #3fb95022 0%, #161b22 100%); }
+  .token.dump { border: 2px solid #f85149; background: linear-gradient(180deg, #f8514922 0%, #161b22 100%); box-shadow: 0 0 25px #f8514955; }
+  .token.dump.elite-dump { border-color: #f85149; box-shadow: 0 0 40px #f85149aa; }
+  .token.early { border: 3px solid #3fb950; background: linear-gradient(180deg, #3fb95033 0%, #161b22 100%); box-shadow: 0 0 50px #3fb95088; animation: earlyPulse 3s infinite; }
+  .token.early.elite-early { border-color: #f0b90b; box-shadow: 0 0 60px #f0b90baa; }
+  @keyframes earlyPulse { 0%,100% { box-shadow: 0 0 30px #3fb95066; } 50% { box-shadow: 0 0 60px #3fb950cc; } }
+  .token.pump { border: 3px solid #f85149; background: linear-gradient(180deg, #f8514933 0%, #161b22 100%); box-shadow: 0 0 50px #f85149aa; animation: pumpToken 1s infinite; }
+  .token.pump.mega-pump { border-color: #f0b90b; box-shadow: 0 0 70px #f0b90baa; }
+  @keyframes pumpToken { 0%,100% { box-shadow: 0 0 30px #f8514966; } 50% { box-shadow: 0 0 70px #f85149cc; } }
+  .token-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px; }
+  .token-name { font-weight: bold; font-size: 15px; }
+  .token-symbol { font-size: 12px; color: #8b949e; background: #21262d; padding: 2px 8px; border-radius: 6px; }
+  .rank { display: inline-block; background: #1f6feb; color: white; width: 22px; height: 22px; border-radius: 50%; text-align: center; line-height: 22px; font-size: 12px; font-weight: bold; margin-left: 8px; }
+  .explode-badge { color: white; font-size: 11px; padding: 4px 10px; border-radius: 6px; font-weight: bold; }
+  .explode-badge.elite { background: linear-gradient(135deg, #3fb950, #58a6ff); }
+  .explode-badge.ultra { background: linear-gradient(135deg, #f85149, #f0b90b); }
+  .explode-badge.strong { background: linear-gradient(135deg, #a371f7, #58a6ff); }
+  .explode-badge.medium { background: linear-gradient(135deg, #3fb950, #58a6ff); }
+  .explode-badge.weak { background: #58a6ff; }
+  .explode-badge.elite-dump { background: linear-gradient(135deg, #f85149, #a371f7); }
+  .explode-badge.strong-dump { background: linear-gradient(135deg, #f85149, #d29922); }
+  .explode-badge.elite-early { background: linear-gradient(135deg, #f0b90b, #3fb950); }
+  .explode-badge.early-badge-style { background: linear-gradient(135deg, #3fb950, #a371f7); }
+  .explode-badge.pump-elite { background: linear-gradient(135deg, #f85149, #f0b90b); animation: pumpPulse 1s infinite; }
+  .explode-badge.pump-strong { background: linear-gradient(135deg, #f85149, #a371f7); }
+  .confidence-badge { font-size: 10px; padding: 3px 8px; border-radius: 6px; font-weight: bold; margin-right: 4px; }
+  .confidence-badge.high { background: #238636; color: white; }
+  .confidence-badge.mid { background: #d29922; color: #0d1117; }
+  .confidence-badge.low { background: #6e7681; color: white; }
+  .backtest-badge { font-size: 10px; padding: 3px 8px; border-radius: 6px; font-weight: bold; margin-right: 4px; }
+  .backtest-badge.good { background: #3fb950; color: white; }
+  .backtest-badge.mid { background: #d29922; color: #0d1117; }
+  .backtest-badge.bad { background: #f85149; color: white; }
+  .early-badge-style { display: inline-block; font-size: 10px; padding: 3px 8px; border-radius: 6px; font-weight: bold; margin-right: 4px; }
+  .early-badge-style.before { background: linear-gradient(135deg, #3fb950, #a371f7); color: white; }
+  .early-badge-style.started { background: linear-gradient(135deg, #d29922, #f0b90b); color: #0d1117; }
+  .early-badge-style.late { background: linear-gradient(135deg, #f85149, #d29922); color: white; }
+  
+  .token-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 13px; margin-top: 8px; }
+  .stat-name { color: #8b949e; }
+  .stat-val { color: #e6edf3; font-weight: 500; }
+  .stat-val.up { color: #3fb950; }
+  .stat-val.down { color: #f85149; }
+  .stat-val.hot { color: #f85149; font-weight: bold; }
+  .rec-box { display: flex; align-items: center; gap: 10px; margin-top: 10px; padding: 10px; border-radius: 8px; font-size: 13px; }
+  .rec-box.explode { background: linear-gradient(135deg, #a371f733, #f8514933); border: 1px solid #a371f7; }
+  .rec-box.ultra { background: linear-gradient(135deg, #f8514933, #f0b90b33); border: 2px solid #f85149; }
+  .rec-box.elite { background: linear-gradient(135deg, #3fb95033, #58a6ff33); border: 2px solid #3fb950; }
+  .rec-box.dump { background: linear-gradient(135deg, #f8514933, #a371f733); border: 2px solid #f85149; }
+  .rec-box.elite-dump { background: linear-gradient(135deg, #f8514966, #a371f766); border: 2px solid #f85149; }
+  .rec-box.early { background: linear-gradient(135deg, #3fb95044, #a371f744); border: 2px solid #3fb950; }
+  .rec-box.pump { background: linear-gradient(135deg, #f8514944, #f0b90b44); border: 2px solid #f85149; animation: pumpPulse 1s infinite; }
+  .rec-emoji { font-size: 22px; }
+  .rec-title { font-weight: bold; font-size: 14px; }
+  .rec-score { font-size: 11px; color: #8b949e; margin-top: 2px; }
+  .strategy { margin-top: 8px; padding: 10px; background: #0d1117; border-radius: 6px; font-size: 12px; border-right: 3px solid #f0b90b; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .strategy.dump-strategy { border-right-color: #f85149; }
+  .strategy.early-strategy { border-right-color: #3fb950; }
+  .strategy.pump-strategy { border-right-color: #f85149; }
+  .strategy-item { display: flex; justify-content: space-between; }
+  .strategy-label { color: #8b949e; }
+  .strategy-value { font-weight: bold; }
+  .strategy-value.entry { color: #58a6ff; }
+  .strategy-value.target { color: #3fb950; }
+  .strategy-value.target-short { color: #f85149; }
+  .strategy-value.stop { color: #f85149; }
+  .strategy-value.stop-short { color: #3fb950; }
+  .explode-signals { margin-top: 10px; padding: 10px; background: #0d1117; border-radius: 8px; border: 1px solid #a371f7; }
+  .explode-signals.dump-signals { border-color: #f85149; }
+  .explode-signals.early-signals { border-color: #3fb950; }
+  .explode-signals.pump-signals { border-color: #f85149; }
+  .explode-signals-title { font-size: 11px; color: #a371f7; font-weight: bold; margin-bottom: 8px; display: flex; justify-content: space-between; }
+  .explode-signals-title.dump-title { color: #f85149; }
+  .explode-signals-title.early-title { color: #3fb950; }
+  .explode-signals-title.pump-title { color: #f85149; }
+  .signal-group { margin-bottom: 8px; }
+  .signal-group-title { font-size: 10px; color: #8b949e; margin-bottom: 4px; padding-bottom: 3px; border-bottom: 1px solid #21262d; }
+  .signal-row { display: flex; justify-content: space-between; align-items: center; font-size: 11px; padding: 4px 0; }
+  .signal-label { color: #8b949e; display: flex; align-items: center; gap: 4px; }
+  .signal-label .icon { font-size: 12px; }
+  .signal-value { font-weight: bold; font-size: 11px; }
+  .signal-value.on { color: #3fb950; }
+  .signal-value.off { color: #6e7681; }
+  .signal-bar { height: 6px; background: #21262d; border-radius: 3px; overflow: hidden; margin-top: 3px; width: 60px; display: inline-block; vertical-align: middle; }
+  .signal-bar-fill { height: 100%; border-radius: 3px; transition: width 0.4s; }
+  .explode-meter { margin-top: 10px; padding: 12px; background: linear-gradient(135deg, #1a0f1f, #161b22); border-radius: 8px; border: 1px solid #a371f7; text-align: center; }
+  .explode-meter.ultra { border-color: #f85149; }
+  .explode-meter.elite { border-color: #3fb950; }
+  .explode-meter.dump { border-color: #f85149; background: linear-gradient(135deg, #1f0a0a, #161b22); }
+  .explode-meter.early { border-color: #3fb950; background: linear-gradient(135deg, #0a1f0f, #161b22); }
+  .explode-meter.pump { border-color: #f85149; background: linear-gradient(135deg, #2f0a0a, #161b22); animation: pumpPulse 1s infinite; }
+  .explode-meter-label { font-size: 11px; color: #8b949e; margin-bottom: 4px; }
+  .explode-meter-value { font-size: 32px; font-weight: bold; background: linear-gradient(135deg, #a371f7, #f85149, #f0b90b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; background-size: 200% 200%; animation: gradient 3s ease infinite; }
+  .explode-meter.dump .explode-meter-value { background: linear-gradient(135deg, #f85149, #a371f7, #d29922); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .explode-meter.early .explode-meter-value { background: linear-gradient(135deg, #3fb950, #a371f7, #f0b90b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .explode-meter.pump .explode-meter-value { background: linear-gradient(135deg, #f85149, #f0b90b, #f85149); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  @keyframes gradient { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+  .explode-meter-bar { height: 10px; background: #21262d; border-radius: 5px; margin-top: 8px; overflow: hidden; }
+  .explode-meter-fill { height: 100%; background: linear-gradient(90deg, #a371f7, #f85149, #f0b90b); border-radius: 5px; transition: width 0.6s; }
+  .explode-meter.dump .explode-meter-fill { background: linear-gradient(90deg, #f85149, #a371f7, #d29922); }
+  .explode-meter.early .explode-meter-fill { background: linear-gradient(90deg, #3fb950, #a371f7, #f0b90b); }
+  .explode-meter.pump .explode-meter-fill { background: linear-gradient(90deg, #f85149, #f0b90b, #f85149); }
+  .explode-meter-info { display: flex; justify-content: space-between; margin-top: 6px; font-size: 10px; color: #8b949e; }
+  .backtest-box { margin-top: 10px; padding: 10px; background: #0d1117; border-radius: 8px; border: 1px solid #58a6ff; }
+  .backtest-box.bad { border-color: #f85149; }
+  .backtest-box.good { border-color: #3fb950; }
+  .backtest-title { font-size: 11px; color: #58a6ff; font-weight: bold; margin-bottom: 6px; }
+  .backtest-box.bad .backtest-title { color: #f85149; }
+  .backtest-box.good .backtest-title { color: #3fb950; }
+  .backtest-row { display: flex; justify-content: space-between; font-size: 11px; padding: 3px 0; }
+  .backtest-row .label { color: #8b949e; }
+  .backtest-row .value { font-weight: bold; }
+  .backtest-row .value.win { color: #3fb950; }
+  .backtest-row .value.loss { color: #f85149; }
+  .warning-tag { display: inline-block; background: #f85149; color: white; font-size: 10px; padding: 3px 8px; border-radius: 4px; margin: 4px 2px 0 0; font-weight: bold; }
+  .bonus-tag { display: inline-block; background: linear-gradient(135deg,#f0b90b,#f85149); color: white; font-size: 10px; padding: 3px 8px; border-radius: 4px; margin: 4px 2px 0 0; font-weight: bold; }
+  .early-tag { display: inline-block; background: linear-gradient(135deg,#3fb950,#a371f7); color: white; font-size: 10px; padding: 3px 8px; border-radius: 4px; margin: 4px 2px 0 0; font-weight: bold; }
+  .pump-tag { display: inline-block; background: linear-gradient(135deg,#f85149,#f0b90b); color: white; font-size: 10px; padding: 3px 8px; border-radius: 4px; margin: 4px 2px 0 0; font-weight: bold; animation: pumpPulse 1s infinite; }
+  .empty { text-align: center; padding: 30px; color: #8b949e; font-size: 14px; }
+  .whale-panel { background: #161b22; border: 2px solid #f0b90b; border-radius: 12px; padding: 14px; margin-bottom: 16px; }
+  .whale-title { font-size: 14px; font-weight: bold; color: #f0b90b; margin-bottom: 10px; }
+  .whale-input-row { display: flex; gap: 6px; margin-bottom: 8px; }
+  .whale-input-row input { flex: 3; font-family: monospace; direction: ltr; text-align: left; font-size: 12px; background: #0d1117; }
+  .whale-input-row select { flex: 1; min-width: 80px; font-size: 12px; }
+  .whale-controls { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+  .whale-controls button { flex: 1; min-width: 90px; font-size: 12px; padding: 10px; }
+  .add-wallet-btn { background: linear-gradient(135deg, #238636, #3fb950); border: none; color: white; }
+  .clear-wallet-btn { background: linear-gradient(135deg, #f85149, #d29922); border: none; color: white; }
+  .whale-count { font-size: 12px; color: #3fb950; font-weight: bold; margin-bottom: 8px; }
+  .addresses-box { background: #0d1117; border-radius: 8px; padding: 10px; min-height: 70px; margin-bottom: 10px; border: 2px dashed #30363d; max-height: 250px; overflow-y: auto; }
+  .address-chip { display: flex; align-items: center; justify-content: space-between; background: linear-gradient(135deg, #1f6feb, #58a6ff); color: white; padding: 10px; border-radius: 8px; margin: 6px 0; font-family: monospace; font-size: 11px; font-weight: bold; gap: 6px; }
+  .address-chip .net-badge { background: rgba(255,255,255,0.3); padding: 2px 8px; border-radius: 4px; font-size: 10px; }
+  .address-chip .addr-text { flex: 1; direction: ltr; text-align: left; font-size: 11px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .address-chip .remove { background: #f85149; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-weight: bold; }
+  .history-container { max-height: 70vh; overflow-y: auto; }
+  .history-item { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 10px; margin-bottom: 8px; border-right: 4px solid #d29922; }
+  .history-item.dump-item { border-right-color: #f85149; }
+  .history-item.early-item { border-right-color: #3fb950; }
+  .history-item.pump-item { border-right-color: #f85149; }
+  .history-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+  .history-symbol { font-weight: bold; font-size: 14px; }
+  .history-score { font-size: 11px; padding: 2px 8px; border-radius: 4px; background: #f0b90b; color: #0d1117; font-weight: bold; }
+  .history-details { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; font-size: 12px; }
+  .history-label { color: #8b949e; }
+  .history-value { color: #e6edf3; font-weight: 500; }
+  .history-date { font-size: 10px; color: #6e7681; margin-top: 4px; text-align: left; }
+  .tg-send-panel { background: linear-gradient(135deg, #161b22, #1a1f2e); border: 2px solid #229ED9; border-radius: 12px; padding: 14px; margin-bottom: 16px; }
+  .tg-send-title { font-size: 14px; font-weight: bold; color: #229ED9; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+  .tg-send-panel input { width: 100%; margin-bottom: 8px; font-size: 12px; font-family: monospace; direction: ltr; text-align: left; background: #0d1117; }
+  .tg-send-btn { width: 100%; background: linear-gradient(135deg, #229ED9, #0088cc); border: none; color: white; padding: 14px; border-radius: 10px; font-size: 15px; font-weight: bold; cursor: pointer; margin-top: 6px; }
+  .tg-auto-btn { background: linear-gradient(135deg, #3fb950, #229ED9); border: none; color: white; padding: 12px; border-radius: 8px; font-size: 13px; font-weight: bold; cursor: pointer; margin-top: 6px; width: 100%; }
+  .tg-auto-btn.on { background: linear-gradient(135deg, #f85149, #d29922); }
+  .tg-pump-btn { background: linear-gradient(135deg, #f85149, #f0b90b); border: none; color: white; padding: 12px; border-radius: 8px; font-size: 13px; font-weight: bold; cursor: pointer; margin-top: 6px; width: 100%; }
+  .tg-pump-btn.on { background: linear-gradient(135deg, #238636, #3fb950); }
+  .tg-status { font-size: 12px; padding: 8px; border-radius: 6px; margin-top: 10px; text-align: center; display: none; }
+  .tg-status.ok { background: #23863622; color: #3fb950; display: block; }
+  .tg-status.err { background: #f8514922; color: #f85149; display: block; }
+  .tg-status.wait { background: #d2992222; color: #d29922; display: block; }
+  .tg-status.auto { background: #229ED922; color: #229ED9; display: block; font-weight: bold; }
+  .tg-hint { font-size: 10px; color: #8b949e; margin-top: 8px; text-align: center; line-height: 1.6; }
+  .tg-hint a { color: #229ED9; text-decoration: none; }
+  .timing-banner { padding: 8px 12px; border-radius: 8px; margin: 8px 0; font-size: 12px; font-weight: bold; }
+  
+  .countdown-timer { margin: 10px 0; padding: 14px; background: linear-gradient(135deg, #0d1117, #161b22); border: 2px solid #58a6ff; border-radius: 12px; position: relative; overflow: hidden; transition: border-color 0.5s; }
+  .countdown-timer.dump-timer { border-color: #f85149; }
+  .countdown-timer.early-timer { border-color: #3fb950; box-shadow: 0 0 20px #3fb95044; }
+  .countdown-timer.pump-timer { border-color: #f85149; box-shadow: 0 0 20px #f8514944; animation: pumpPulse 1s infinite; }
+  .countdown-header { display: flex; justify-content: space-between; font-size: 12px; color: #8b949e; margin-bottom: 10px; font-weight: bold; }
+  .countdown-confidence { color: #3fb950; }
+  .countdown-display { text-align: center; margin: 12px 0; }
+  .countdown-time { font-size: 42px; font-weight: bold; font-family: 'Courier New', monospace; letter-spacing: 4px; color: #58a6ff; text-shadow: 0 0 20px currentColor; transition: color 0.5s; }
+  .countdown-label { font-size: 13px; color: #e6edf3; margin-top: 6px; font-weight: bold; }
+  .countdown-bar { height: 12px; background: #21262d; border-radius: 6px; overflow: hidden; margin: 12px 0 8px; box-shadow: inset 0 0 5px #000; }
+  .countdown-bar-fill { height: 100%; background: linear-gradient(90deg, #58a6ff, #a371f7); border-radius: 6px; transition: width 1s linear, background 0.5s; }
+  .countdown-footer { display: flex; justify-content: space-between; font-size: 10px; color: #8b949e; margin-top: 6px; gap: 8px; flex-wrap: wrap; }
+  .countdown-status { font-weight: bold; }
+  
+  .score-breakdown { margin-top: 10px; padding: 10px; background: linear-gradient(135deg,#161b22,#0d1117); border-radius: 8px; border: 1px solid #d29922; }
+  .score-breakdown-title { font-size: 11px; color: #d29922; font-weight: bold; margin-bottom: 6px; }
+  .score-row { display: flex; justify-content: space-between; font-size: 11px; padding: 3px 0; }
+  .score-row .label { color: #8b949e; }
+  .score-row .value { font-weight: bold; }
+  .score-row .value.plus { color: #3fb950; }
+  .score-row .value.minus { color: #f85149; }
+  
+  .gate-alert { margin-top: 8px; padding: 8px 10px; background: linear-gradient(135deg,#f8514922,#d2992222); border: 1px solid #f85149; border-radius: 6px; font-size: 11px; color: #f85149; font-weight: bold; text-align: center; }
+  .backtest-alert { margin-top: 8px; padding: 8px 10px; background: linear-gradient(135deg,#f8514933,#000000); border: 1px solid #f85149; border-radius: 6px; font-size: 11px; color: #f85149; font-weight: bold; text-align: center; }
+  
+  .progress-panel { background: linear-gradient(135deg,#161b22,#0d1117); border: 2px solid #1f6feb; border-radius: 12px; padding: 12px; margin-bottom: 12px; }
+  .progress-title { font-size: 12px; color: #58a6ff; font-weight: bold; margin-bottom: 8px; text-align: center; }
+  .progress-bar { height: 20px; background: #21262d; border-radius: 10px; overflow: hidden; box-shadow: inset 0 0 5px #000; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, #1f6feb, #58a6ff, #a371f7); border-radius: 10px; transition: width 0.3s; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; color: white; }
+  .progress-info { display: flex; justify-content: space-between; font-size: 11px; color: #8b949e; margin-top: 6px; }
+  
+  .early-info-panel { background: linear-gradient(135deg, #0a1f0f, #161b22); border: 2px solid #3fb950; border-radius: 10px; padding: 12px; margin-bottom: 12px; }
+  .early-info-title { font-size: 13px; color: #3fb950; font-weight: bold; margin-bottom: 8px; }
+  .early-info-text { font-size: 11px; color: #8b949e; line-height: 1.8; }
+  .early-info-text b { color: #3fb950; }
+  
+  .pump-info-panel { background: linear-gradient(135deg, #2f0a0a, #161b22); border: 2px solid #f85149; border-radius: 10px; padding: 12px; margin-bottom: 12px; }
+  .pump-info-title { font-size: 13px; color: #f85149; font-weight: bold; margin-bottom: 8px; animation: pumpPulse 1s infinite; }
+  .pump-info-text { font-size: 11px; color: #8b949e; line-height: 1.8; }
+  .pump-info-text b { color: #f85149; }
+  
+  .advice-modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.9); z-index: 9999; display: none; overflow-y: auto; padding: 20px 12px; }
+  .advice-modal.show { display: block; }
+  .advice-content { max-width: 650px; margin: 20px auto; background: linear-gradient(135deg, #161b22, #0d1117); border: 3px solid #f0b90b; border-radius: 16px; padding: 20px; box-shadow: 0 0 50px #f0b90b55; }
+  .advice-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid #30363d; }
+  .advice-title { font-size: 20px; font-weight: bold; color: #f0b90b; }
+  .advice-close { background: #f85149; color: white; border: none; width: 40px; height: 40px; border-radius: 50%; font-size: 22px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; flex: 0 0 auto; }
+  .advice-block { margin-bottom: 16px; padding: 14px; background: linear-gradient(135deg, #0d1117, #161b22); border-radius: 10px; border-right: 4px solid #58a6ff; }
+  .advice-block-title { font-size: 15px; font-weight: bold; color: #58a6ff; margin-bottom: 10px; }
+  .advice-block p { font-size: 13px; line-height: 1.9; color: #e6edf3; margin-bottom: 6px; }
+  .advice-block p b { color: #f0b90b; }
+  .advice-table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 12px; }
+  .advice-table th { background: linear-gradient(135deg, #1f6feb, #58a6ff); color: white; padding: 10px 8px; text-align: center; font-weight: bold; }
+  .advice-table td { padding: 10px 8px; border-bottom: 1px solid #21262d; color: #e6edf3; text-align: center; }
+  .advice-table tr:nth-child(even) td { background: #161b22; }
+  .advice-table tr:nth-child(odd) td { background: #0d1117; }
+  .advice-table td.green { color: #3fb950; font-weight: bold; }
+  .advice-table td.yellow { color: #d29922; font-weight: bold; }
+  .advice-table td.red { color: #f85149; font-weight: bold; }
+  .advice-table td.gray { color: #6e7681; font-weight: bold; }
+  .advice-quote { padding: 14px 18px; background: linear-gradient(135deg, #f0b90b22, #d2992222); border-right: 4px solid #f0b90b; border-radius: 8px; font-size: 15px; font-weight: bold; color: #f0b90b; text-align: center; margin: 14px 0; }
+  .advice-final { padding: 18px; background: linear-gradient(135deg, #3fb95033, #58a6ff33); border: 2px solid #3fb950; border-radius: 10px; font-size: 14px; font-weight: bold; color: #3fb950; text-align: center; line-height: 1.9; margin-top: 14px; }
+  .advice-list { list-style: none; padding: 0; }
+  .advice-list li { font-size: 13px; padding: 6px 0; padding-right: 24px; position: relative; line-height: 1.7; }
+  .advice-list li:before { content: "•"; position: absolute; right: 8px; color: #3fb950; font-weight: bold; font-size: 18px; }
+  .advice-list li.red:before { color: #f85149; }
+  .advice-list li.yellow:before { color: #d29922; }
+  
+  @media (max-width: 500px) {
+    .countdown-time { font-size: 34px; letter-spacing: 2px; }
+    .countdown-display { margin: 8px 0; }
+    h1 { font-size: 15px; }
+    body { padding: 10px; }
+    .advice-content { padding: 14px; margin: 10px auto; }
+    .advice-title { font-size: 16px; }
+    .advice-table th, .advice-table td { padding: 8px 4px; font-size: 10px; }
+    .advice-close { width: 34px; height: 34px; font-size: 18px; }
+    .mode-btn { min-width: 65px; font-size: 9px; }
+  }
+  
+  footer { text-align: center; font-size: 11px; color: #6e7681; margin-top: 20px; padding-top: 16px; border-top: 1px solid #21262d; }
+</style>
+</head>
+<body>
+
+  <h1>🚀 كاشف الانفجار V13 <span class="v13-badge">ULTIMATE</span> <span class="pump-badge">PUMP DETECTOR</span></h1>
+  <div class="subtitle">Spot + Futures | Long + Short | قبل الانفجار | Pump Detector</div>
+
+  <button class="install-btn" id="installBtn" onclick="installPWA()">📱 تثبيت التطبيق على الهاتف</button>
+
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('explode', event)">⚡ الفحص</div>
+    <div class="tab" onclick="switchTab('radar', event)">🎯 الرادار</div>
+    <div class="tab" onclick="switchTab('whales', event)">🐋 المحافظ</div>
+    <div class="tab" onclick="switchTab('history', event)">📜 السجل</div>
+  </div>
+
+  <div id="tab-explode">
+    <div class="single-search-box" style="border-color:#a371f7;">
+      <div class="single-search-title" style="color:#a371f7;">⚡ محرك V13 — ULTIMATE</div>
+      <div style="font-size:11px; color:#8b949e; line-height:1.7;">
+        ✅ <b style="color:#3fb950;">Spot + Futures</b> • 🎯 <b style="color:#3fb950;">قبل الانفجار</b> • 🚀 <b style="color:#f85149;">Pump Detector</b> • 🐋 <b style="color:#f0b90b;">تتبع الحيتان</b>
+      </div>
+    </div>
+
+    <div class="market-switch">
+      <button class="market-btn active-spot" id="marketBtnSpot" onclick="setMarket('spot')">🟢 SPOT</button>
+      <button class="market-btn" id="marketBtnFutures" onclick="setMarket('futures')">🔴 FUTURES</button>
+    </div>
+
+    <div class="mode-switch">
+      <button class="mode-btn active-buy" id="modeBtnBuy" onclick="setMode('buy')">🟢 شراء</button>
+      <button class="mode-btn" id="modeBtnEarly" onclick="setMode('early')">🎯 قبل الانفجار</button>
+      <button class="mode-btn" id="modeBtnSell" onclick="setMode('sell')">🔴 بيع Short</button>
+      <button class="mode-btn" id="modeBtnPump" onclick="setMode('pump')">🚀 Pump</button>
+    </div>
+
+    <div class="controls">
+      <select id="explodeLimit">
+        <option value="50">فحص 50 عملة (سريع)</option>
+        <option value="100" selected>فحص 100 عملة</option>
+        <option value="200">فحص 200 عملة</option>
+        <option value="400">فحص 400 عملة</option>
+        <option value="600">فحص الكل ⭐</option>
+      </select>
+      <select id="explodeMinScore">
+        <option value="90">💎 النخبة (90%+)</option>
+        <option value="80" selected>🚀 الوشيكة (80%+)</option>
+        <option value="70">🔥 قوية (70%+)</option>
+        <option value="55">⚡ كل الإشارات (55%+)</option>
+      </select>
+    </div>
+    <div class="controls">
+      <button class="explode-btn" id="scanBtn" onclick="runExplodeScanner()" style="width:100%;">⚡ ابحث</button>
+    </div>
+    <div class="controls">
+      <button class="stop-btn" id="stopBtn" onclick="stopScan()" style="width:100%; display:none;">⏹️ إيقاف البحث</button>
+    </div>
+    <div class="controls">
+      <button class="advice-btn" onclick="showAdvice()" style="width:100%;">💡 نصيحة ضرورية</button>
+    </div>
+    <div class="controls">
+      <button id="autoBtn" onclick="toggleAutoScan()" style="background:linear-gradient(135deg,#1f6feb,#58a6ff); border:none; color:white;">🔄 فحص تلقائي (10 د)</button>
+    </div>
+    <div style="font-size:10px; color:#8b949e; text-align:center; margin-bottom:8px;" id="autoStatus"></div>
+    <div style="font-size:10px; color:#8b949e; text-align:center; margin-bottom:8px;" id="cooldownStatus"></div>
+    
+    <div class="early-info-panel" id="earlyInfoPanel" style="display:none;">
+      <div class="early-info-title">🎯 فلتر "قبل الانفجار"</div>
+      <div class="early-info-text">
+        ✅ يستبعد أي عملة <b>+2.5%</b> أو أكثر<br>
+        ✅ يبحث عن <b>ربح 5-20%</b> من البداية
+      </div>
+    </div>
+    
+    <div class="pump-info-panel" id="pumpInfoPanel" style="display:none;">
+      <div class="pump-info-title">🚀 Pump Detector — كاشف الانفجار المفاجئ</div>
+      <div class="pump-info-text">
+        ⚡ <b>فحص كل 30 ثانية</b> للعملات المتفجرة<br>
+        📊 يكتشف <b>حجم 5x شاذ</b> + سعر يتحرك<br>
+        🎯 <b>يسبق السوق 2-5 دقائق</b><br>
+        ⚠️ <b>تحذير: إشارات سريعة = ريسك عالي!</b>
+      </div>
+    </div>
+    
+    <div id="progressPanel" class="progress-panel" style="display:none;">
+      <div class="progress-title" id="progressTitle">⏳ جاري الفحص...</div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill" style="width:0%">0%</div>
+      </div>
+      <div class="progress-info">
+        <span id="progressCurrent">0 / 0</span>
+        <span id="progressFound">✅ 0 إشارة</span>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-radar" style="display:none;">
+    <div class="single-search-box">
+      <div class="single-search-title">🔍 تحليل عملة محددة</div>
+      <div class="single-search-row">
+        <input type="text" id="symbolInput" placeholder="مثال: BTCUSDT" />
+        <button class="analyze-btn" onclick="analyzeSingle()">تحليل</button>
+      </div>
+    </div>
+    <div class="controls">
+      <select id="limitSelect">
+        <option value="10">أفضل 10</option>
+        <option value="20" selected>أفضل 20</option>
+        <option value="30">أفضل 30</option>
+      </select>
+      <button class="radar-btn" onclick="runRadar()">🚀 تشغيل الرادار</button>
+    </div>
+  </div>
+
+  <div id="tab-whales" style="display:none;">
+    <div class="whale-panel">
+      <div class="whale-title">🐋 تتبع المحافظ الكبيرة</div>
+      <div class="whale-input-row">
+        <input type="text" id="walletAddress" placeholder="0x..." />
+        <select id="walletNetwork">
+          <option value="ETH">ETH</option><option value="BSC">BSC</option>
+          <option value="POLYGON">Polygon</option><option value="SOL">SOL</option>
+          <option value="TRON">TRON</option><option value="ARB">Arbitrum</option>
+          <option value="BTC">Bitcoin</option>
+        </select>
+      </div>
+      <div class="whale-controls">
+        <button class="add-wallet-btn" onclick="addWallet()">➕ إضافة</button>
+        <button class="clear-wallet-btn" onclick="clearWallets()">🗑️ مسح الكل</button>
+      </div>
+      <div class="whale-count" id="whaleCount">📊 عدد المحافظ: 0</div>
+      <div class="addresses-box" id="addressesBox">
+        <div class="empty" style="padding:15px; font-size:12px;">لا توجد محافظ</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-history" style="display:none;">
+    <div class="history-container" id="historyContainer">
+      <div class="empty">لا يوجد سجل</div>
+    </div>
+  </div>
+
+  <div class="status" id="status"></div>
+  <div id="results"></div>
+
+  <div class="tg-send-panel">
+    <div class="tg-send-title">
+      <span>📤 إرسال إلى تلجرام</span>
+      <span id="tgAutoIndicator" style="font-size:11px; color:#8b949e;">⚪ متوقف</span>
+    </div>
+    <input type="text" id="tgBotToken" placeholder="Bot Token" />
+    <input type="text" id="tgChatId" placeholder="Chat ID" />
+    <button class="tg-send-btn" id="tgSendBtn" onclick="sendToTelegram()">🚀 إرسال يدوي</button>
+    <button class="tg-auto-btn" id="tgAutoBtn" onclick="toggleAutoTelegram()">🔔 تشغيل الإرسال التلقائي</button>
+    <button class="tg-pump-btn" id="tgPumpBtn" onclick="togglePumpTelegram()">🚀 إرسال Pump تلقائي</button>
+    <div class="tg-status" id="tgStatus"></div>
+    <div class="tg-hint">
+      Token من <a href="https://t.me/BotFather" target="_blank">@BotFather</a> | 
+      Chat ID من <a href="https://t.me/userinfobot" target="_blank">@userinfobot</a>
+    </div>
+  </div>
+
+  <footer>⚡ كاشف الانفجار V13 ULTIMATE — Spot + Futures</footer>
+
+<div class="advice-modal" id="adviceModal">
+  <div class="advice-content">
+    <div class="advice-header">
+      <div class="advice-title">💡 نصيحة ضرورية</div>
+      <button class="advice-close" onclick="closeAdvice()">×</button>
+    </div>
+
+    <div class="advice-block" style="border-right-color:#f0b90b;">
+      <div class="advice-block-title" style="color:#f0b90b;">🎯 القاعدة الذهبية</div>
+      <p style="font-size:14px; text-align:center; font-weight:bold; color:#f0b90b;">
+        "عدم الدخول = صفقة رابحة"
+      </p>
+      <p style="text-align:center;">
+        كل إشارة <b style="color:#3fb950;">تتجاهلها</b> = <b style="color:#3fb950;">فلوس محفوظة</b><br>
+        كل إشارة <b style="color:#f0b90b;">💎 نخبة</b> = <b style="color:#f0b90b;">ربح محقق</b>
+      </p>
+    </div>
+
+    <div class="advice-block" style="border-right-color:#3fb950;">
+      <div class="advice-block-title" style="color:#3fb950;">🎯 فلتر "قبل الانفجار"</div>
+      <p>يستبعد أي عملة <b>+2.5%</b> — يبحث عن <b>التجميع</b></p>
+      <table class="advice-table">
+        <thead>
+          <tr><th>+% يومي</th><th>الحالة</th><th>الربح</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>0 - 2.5%</td><td>🟢 قبل</td><td class="green">5-20% 🚀</td></tr>
+          <tr><td>2.5 - 7%</td><td>🟡 بداية</td><td class="yellow">3-8%</td></tr>
+          <tr><td>7 - 15%</td><td>🟠 متوسط</td><td class="yellow">1-4%</td></tr>
+          <tr><td>+15%</td><td>🔴 متأخر</td><td class="red">تجاهل</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="advice-block" style="border-right-color:#f85149;">
+      <div class="advice-block-title" style="color:#f85149;">🚀 Pump Detector — جديد!</div>
+      <p>يكتشف الانفجارات <b>المفاجئة</b> — يحلل:</p>
+      <ul class="advice-list">
+        <li>📊 <b>حجم 5x</b> شاذ (Vol Spike)</li>
+        <li>⚡ <b>سعر يتحرك 1%+</b> في دقيقة</li>
+        <li>💰 <b>صفقات كبيرة مفاجئة</b></li>
+        <li>🎯 <b>B/A يرتفع</b> فوق 2.0</li>
+      </ul>
+      <p style="margin-top:8px; color:#f85149;"><b>⚠️ تحذير: Pump إشارات سريعة = ريسك عالي!</b></p>
+    </div>
+
+    <div class="advice-block" style="border-right-color:#3fb950;">
+      <div class="advice-block-title" style="color:#3fb950;">📊 جدول القرار</div>
+      <table class="advice-table">
+        <thead>
+          <tr><th>المستوى</th><th>الاحتمال</th><th>الثقة</th><th>BT</th><th>القرار</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>💎 نخبة</td><td>≥92%</td><td>≥90%</td><td>≥55%</td><td class="green">ادخل بقوة</td></tr>
+          <tr><td>🚀 وشيك</td><td>≥85%</td><td>≥85%</td><td>≥40%</td><td class="green">ادخل بحذر</td></tr>
+          <tr><td>🔥 قوي</td><td>≥72%</td><td>≥70%</td><td>≥40%</td><td class="yellow">راقب</td></tr>
+          <tr><td>📡 ضعيف</td><td>&lt;72%</td><td>-</td><td>-</td><td class="gray">تجاهل</td></tr>
+          <tr><td>🚫 فاشل</td><td>أي</td><td>-</td><td>&lt;20%</td><td class="red">ابتعد</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="advice-block" style="border-right-color:#f85149;">
+      <div class="advice-block-title" style="color:#f85149;">🟢 vs 🔴 Long و Short</div>
+      <table class="advice-table">
+        <thead>
+          <tr><th>المؤشر</th><th>🟢 Long</th><th>🔴 Short</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>+% يومي</td><td class="green">&lt; 5%</td><td class="red">&gt; 10%</td></tr>
+          <tr><td>B/A</td><td class="green">&gt; 1.3</td><td class="red">&lt; 0.7</td></tr>
+          <tr><td>OBV</td><td class="green">إيجابي</td><td class="red">سلبي</td></tr>
+          <tr><td>Funding</td><td class="green">سلبي قوي</td><td class="red">موجب مرتفع</td></tr>
+          <tr><td>الهدف</td><td class="green">صعود</td><td class="red">هبوط</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="advice-block" style="border-right-color:#229ED9;">
+      <div class="advice-block-title" style="color:#229ED9;">📈 شو نستفاد من V13؟</div>
+      <table class="advice-table">
+        <thead><tr><th>الميزة</th><th>الفائدة</th></tr></thead>
+        <tbody>
+          <tr><td>🎯 فلتر قبل الانفجار</td><td class="green">ربح 5x أكثر</td></tr>
+          <tr><td>🚀 Pump Detector</td><td class="green">يكتشف الانفجارات المفاجئة</td></tr>
+          <tr><td>🟢 Spot + 🔴 Futures</td><td class="green">كل الأسواق</td></tr>
+          <tr><td>🔴 Short (بيع)</td><td class="red">ربح من الهبوط</td></tr>
+          <tr><td>🐋 بصمة الحوت</td><td class="green">ترى التجميع</td></tr>
+          <tr><td>💸 Funding + OI</td><td class="green">مؤشرات Futures</td></tr>
+          <tr><td>🚫 بوابة Backtest</td><td class="green">تمنع الفاشلة</td></tr>
+          <tr><td>🔔 إشعارات قوية</td><td class="green">صوت + اهتزاز</td></tr>
+          <tr><td>📱 PWA</td><td class="green">تطبيق على الهاتف</td></tr>
+          <tr><td>📤 تلجرام تلقائي</td><td class="green">إشارات لك فوراً</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="advice-block" style="border-right-color:#a371f7;">
+      <div class="advice-block-title" style="color:#a371f7;">💡 نصائح ذهبية</div>
+      <ul class="advice-list">
+        <li>🎯 <b>Spot</b>: استعمل "قبل الانفجار" للربح الأكبر</li>
+        <li>🔴 <b>Futures Short</b>: للسوق الهابط (احتياط! رافعة عالية)</li>
+        <li>🚀 <b>Pump</b>: للانفجارات المفاجئة (ريسك عالي - دقّق)</li>
+        <li>💎 <b>ادخل فقط</b> على النخبة (≥92% + ثقة ≥90% + BT ≥55%)</li>
+        <li>🛑 <b>وقف خسارة دائماً</b>: -1.8% Long / +1.8% Short / -2.5% Pump</li>
+        <li>📊 <b>راقب B/A</b>: لازم > 1.3 للـ Long, < 0.7 للـ Short</li>
+        <li>🐋 <b>بصمة حوت</b> ≥ 3 إلزامي (وإلا سقف 80%)</li>
+        <li>⏰ <b>افحص 100-200</b> كل ساعة — آمن ومتوازن</li>
+        <li>💾 <b>استعمل PWA</b> — إشعارات أفضل + بدون نت</li>
+        <li>🎯 <b>لا تكرر الفحص</b> بسرعة — استرح 5 دقائق</li>
+      </ul>
+    </div>
+
+    <div class="advice-quote">
+      💎 "عدم الدخول = صفقة رابحة"
+    </div>
+
+    <div class="advice-final">
+      🎯 تذكر دائماً:<br>
+      <b style="font-size:16px;">الأداة تحميك من الخسائر<br>أكثر مما تعطيك أرباح 💰</b>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* ============ Service Worker (PWA) ============ */
+if ('serviceWorker' in navigator) {
+  const swCode = `
+    const CACHE = 'v13-cache-v1';
+    self.addEventListener('install', e => {
+      self.skipWaiting();
+    });
+    self.addEventListener('activate', e => {
+      e.waitUntil(clients.claim());
+    });
+    self.addEventListener('fetch', e => {
+      if (e.request.url.includes('binance.com')) return;
+      e.respondWith(
+        caches.match(e.request).then(r => r || fetch(e.request).catch(() => caches.match('/')))
+      );
+    });
+  `;
+  const blob = new Blob([swCode], { type: 'application/javascript' });
+  const swUrl = URL.createObjectURL(blob);
+  navigator.serviceWorker.register(swUrl).catch(e => console.log('SW fail:', e));
+}
+
+/* ============ PWA Install ============ */
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById('installBtn').classList.add('show');
+});
+
+function installPWA() {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then((choice) => {
+      if (choice.outcome === 'accepted') {
+        document.getElementById('installBtn').classList.remove('show');
+      }
+      deferredPrompt = null;
+    });
+  }
+}
+
+/* ============ APIs ============ */
+const SAPI = 'https://api.binance.com';
+const FAPI = 'https://fapi.binance.com';
+
+let history = JSON.parse(localStorage.getItem('analysisHistory') || '[]');
+let currentResults = [];
+let currentExplode = [];
+let wallets = JSON.parse(localStorage.getItem('trackedWallets') || '[]');
+let autoScanTimer = null;
+let activeTimers = {};
+let isScanning = false;
+let shouldStopScan = false;
+let cooldownUntil = 0;
+let cooldownTimer = null;
+let autoTelegramEnabled = false;
+let pumpTelegramEnabled = false;
+let sentSignalsCache = {};
+let scanMode = 'buy';
+let scanMarket = 'spot';
+
+/* ============ اختيار السوق ============ */
+function setMarket(market) {
+  scanMarket = market;
+  const btnSpot = document.getElementById('marketBtnSpot');
+  const btnFutures = document.getElementById('marketBtnFutures');
+  
+  btnSpot.classList.remove('active-spot', 'active-futures');
+  btnFutures.classList.remove('active-spot', 'active-futures');
+  
+  if (market === 'spot') {
+    btnSpot.classList.add('active-spot');
+    /* Spot: فقط buy + early */
+    document.getElementById('modeBtnSell').style.display = 'none';
+    if (scanMode === 'sell') {
+      setMode('buy');
+    }
+  } else {
+    btnFutures.classList.add('active-futures');
+    /* Futures: كل الأوضاع */
+    document.getElementById('modeBtnSell').style.display = 'block';
+  }
+  
+  updateScanButton();
+}
+
+/* ============ اختيار الوضع ============ */
+function setMode(mode) {
+  if (scanMarket === 'spot' && mode === 'sell') {
+    mode = 'buy';
+  }
+  scanMode = mode;
+  
+  const btnBuy = document.getElementById('modeBtnBuy');
+  const btnEarly = document.getElementById('modeBtnEarly');
+  const btnSell = document.getElementById('modeBtnSell');
+  const btnPump = document.getElementById('modeBtnPump');
+  const earlyPanel = document.getElementById('earlyInfoPanel');
+  const pumpPanel = document.getElementById('pumpInfoPanel');
+  
+  [btnBuy, btnEarly, btnSell, btnPump].forEach(b => {
+    b.classList.remove('active-buy', 'active-sell', 'active-early', 'active-fbuy', 'active-fsell', 'active-pump');
+  });
+  
+  earlyPanel.style.display = 'none';
+  pumpPanel.style.display = 'none';
+  
+  if (mode === 'buy') {
+    btnBuy.classList.add(scanMarket === 'futures' ? 'active-fbuy' : 'active-buy');
+  } else if (mode === 'early') {
+    btnEarly.classList.add('active-early');
+    earlyPanel.style.display = 'block';
+  } else if (mode === 'sell') {
+    btnSell.classList.add('active-fsell');
+  } else if (mode === 'pump') {
+    btnPump.classList.add('active-pump');
+    pumpPanel.style.display = 'block';
+  }
+  
+  updateScanButton();
+}
+
+function updateScanButton() {
+  const btn = document.getElementById('scanBtn');
+  let text = '⚡ ابحث';
+  let cls = 'explode-btn';
+  let bg = 'linear-gradient(135deg, #3fb950, #58a6ff)';
+  
+  const marketText = scanMarket === 'futures' ? 'Futures' : 'Spot';
+  
+  if (scanMode === 'buy') {
+    text = '⚡ ابحث انفجارات ' + marketText;
+    cls = 'explode-btn';
+    bg = 'linear-gradient(135deg, #3fb950, #58a6ff)';
+  } else if (scanMode === 'early') {
+    text = '🎯 قبل الانفجار (0-2.5%)';
+    cls = 'early-btn';
+    bg = 'linear-gradient(135deg, #3fb950, #a371f7)';
+  } else if (scanMode === 'sell') {
+    text = '🔴 ابحث انهيارات Short';
+    cls = 'explode-btn';
+    bg = 'linear-gradient(135deg, #f85149, #a371f7)';
+  } else if (scanMode === 'pump') {
+    text = '🚀 Pump Detector — فحص سريع';
+    cls = 'pump-btn';
+    bg = 'linear-gradient(135deg, #f85149, #f0b90b)';
+  }
+  
+  btn.textContent = text;
+  btn.className = cls;
+  btn.style.background = bg;
+}
+
+/* ============ الإشعارات ============ */
+function playEliteAlert() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    [523, 659, 784, 1047, 1319].forEach(function(freq, idx) {
+      setTimeout(function() {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.frequency.value = freq;
+        osc.type = 'triangle';
+        gain.gain.setValueAtTime(0.6, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + 0.5);
+      }, idx * 150);
+    });
+    setTimeout(function() {
+      [880, 1200, 1600].forEach(function(freq, idx) {
+        setTimeout(function() {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.connect(gain); gain.connect(ctx.destination);
+          osc.frequency.value = freq;
+          osc.type = 'sine';
+          gain.gain.setValueAtTime(0.5, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
+          osc.start(ctx.currentTime);
+          osc.stop(ctx.currentTime + 0.4);
+        }, idx * 200);
+      });
+    }, 800);
+    if (navigator.vibrate) navigator.vibrate([200, 100, 200, 100, 200]);
+  } catch(e) {}
+}
+
+function playPumpAlert() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    /* صوت انفجار قوي */
+    for (let i = 0; i < 8; i++) {
+      setTimeout(function() {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.frequency.value = 400 + i * 200;
+        osc.type = 'sawtooth';
+        gain.gain.setValueAtTime(0.5, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + 0.15);
+      }, i * 80);
+    }
+    if (navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 100, 50, 100]);
+  } catch(e) {}
+}
+
+function showBrowserNotification(title, body) {
+  if (!('Notification' in window)) return;
+  if (Notification.permission === 'granted') {
+    const n = new Notification(title, { body: body, icon: '🚀', badge: '🚀', vibrate: [200, 100, 200] });
+    setTimeout(() => n.close(), 15000);
+  } else if (Notification.permission !== 'denied') {
+    Notification.requestPermission();
+  }
+}
+
+/* ============ المؤشرات ============ */
+function calcRSI(closes, period) {
+  period = period || 14;
+  if (closes.length < period + 1) return 50;
+  let gains = 0, losses = 0;
+  for (let i = closes.length - period; i < closes.length; i++) {
+    const diff = closes[i] - closes[i - 1];
+    if (diff > 0) gains += diff; else losses -= diff;
+  }
+  const avgGain = gains / period, avgLoss = losses / period;
+  if (avgLoss === 0) return 100;
+  return 100 - (100 / (1 + avgGain / avgLoss));
+}
+
+function calcEMA(data, period) {
+  if (data.length < period) return data[data.length - 1] || 0;
+  const k = 2 / (period + 1);
+  let ema = data.slice(0, period).reduce(function(a, b) { return a + b; }, 0) / period;
+  for (let i = period; i < data.length; i++) ema = data[i] * k + ema * (1 - k);
+  return ema;
+}
+
+async function safeFetch(url) {
+  try {
+    const res = await fetch(url);
+    if (res.status === 418 || res.status === 429) {
+      setCooldown(120);
+      throw new Error('RATE_LIMIT');
+    }
+    if (!res.ok) return null;
+    return await res.json();
+  } catch (e) {
+    if (e.message === 'RATE_LIMIT') throw e;
+    return null;
+  }
+}
+
+function getAPI() { return scanMarket === 'futures' ? FAPI : SAPI; }
+function getKlines(symbol, interval, limit) {
+  const base = getAPI();
+  return safeFetch(base + (scanMarket === 'futures' ? '/fapi/v1/klines?' : '/api/v3/klines?') + 'symbol=' + symbol + '&interval=' + interval + '&limit=' + limit);
+}
+function getDepth(symbol) {
+  const base = getAPI();
+  return safeFetch(base + (scanMarket === 'futures' ? '/fapi/v1/depth?' : '/api/v3/depth?') + 'symbol=' + symbol + '&limit=100');
+}
+function getTrades(symbol) {
+  const base = getAPI();
+  return safeFetch(base + (scanMarket === 'futures' ? '/fapi/v1/aggTrades?' : '/api/v3/aggTrades?') + 'symbol=' + symbol + '&limit=1000');
+}
+
+/* ============ تحليل كامل (Spot + Futures) ============ */
+async function analyzeExplosionDeep(t) {
+  const symbol = t.symbol;
+  const isFutures = scanMarket === 'futures';
+  
+  const promises = [
+    getKlines(symbol, '1m', 200),
+    getKlines(symbol, '5m', 100),
+    getKlines(symbol, '15m', 50),
+    getKlines(symbol, '1h', 50),
+    getDepth(symbol),
+    getTrades(symbol)
+  ];
+  
+  if (isFutures) {
+    promises.push(safeFetch(FAPI + '/fapi/v1/premiumIndex?symbol=' + symbol));
+    promises.push(safeFetch(FAPI + '/fapi/v1/openInterest?symbol=' + symbol));
+    promises.push(safeFetch(FAPI + '/futures/data/topLongShortPositionRatio?symbol=' + symbol + '&period=5m&limit=30'));
+  }
+  
+  const results = await Promise.all(promises);
+  
+  const k1m = results[0], k5m = results[1], k15m = results[2], k1h = results[3];
+  const orderBook = results[4], trades = results[5];
+  const fundingData = isFutures ? results[6] : null;
+  const oiData = isFutures ? results[7] : null;
+  const topLS = isFutures ? results[8] : null;
+  
+  if (!Array.isArray(k1m) || k1m.length < 30) return null;
+  
+  const closes1   = k1m.map(function(k) { return parseFloat(k[4]); });
+  const highs1    = k1m.map(function(k) { return parseFloat(k[2]); });
+  const lows1     = k1m.map(function(k) { return parseFloat(k[3]); });
+  const opens1    = k1m.map(function(k) { return parseFloat(k[1]); });
+  const vols1     = k1m.map(function(k) { return parseFloat(k[5]); });
+  const trades1   = k1m.map(function(k) { return parseFloat(k[8]); });
+  const takerBuy1 = k1m.map(function(k) { return parseFloat(k[9]); });
+  
+  const closes5  = (Array.isArray(k5m) && k5m.length > 20) ? k5m.map(function(k) { return parseFloat(k[4]); }) : closes1;
+  const highs5   = (Array.isArray(k5m) && k5m.length > 20) ? k5m.map(function(k) { return parseFloat(k[2]); }) : highs1;
+  const lows5    = (Array.isArray(k5m) && k5m.length > 20) ? k5m.map(function(k) { return parseFloat(k[3]); }) : lows1;
+  const closes15 = (Array.isArray(k15m) && k15m.length > 20) ? k15m.map(function(k) { return parseFloat(k[4]); }) : closes1;
+  const closes1h = (Array.isArray(k1h) && k1h.length > 20) ? k1h.map(function(k) { return parseFloat(k[4]); }) : closes1;
+  const highs1h  = (Array.isArray(k1h) && k1h.length > 20) ? k1h.map(function(k) { return parseFloat(k[2]); }) : highs1;
+  const lows1h   = (Array.isArray(k1h) && k1h.length > 20) ? k1h.map(function(k) { return parseFloat(k[3]); }) : lows1;
+  
+  const price = closes1[closes1.length - 1];
+  const vol24h = parseFloat(t.quoteVolume);
+  const change24h = parseFloat(t.priceChangePercent);
+  
+  const avgVol20 = vols1.slice(-20).reduce(function(a,b) { return a+b; }, 0) / 20;
+  const avgTrades20 = trades1.slice(-20).reduce(function(a,b) { return a+b; }, 0) / 20;
+  let whaleCandles = 0;
+  for (let i = closes1.length - 20; i < closes1.length; i++) {
+    const body = Math.abs(closes1[i] - opens1[i]);
+    const range = highs1[i] - lows1[i];
+    const bodyRatio = body / (range || 1);
+    if (bodyRatio < 0.4 && vols1[i] > avgVol20 * 1.3 && trades1[i] > avgTrades20 * 1.2 && range / price < 0.012) whaleCandles++;
+  }
+  const whaleScore = whaleCandles >= 5 ? 100 : whaleCandles >= 4 ? 85 : whaleCandles >= 3 ? 70 : whaleCandles >= 2 ? 50 : 25;
+  
+  const last15High = Math.max.apply(null, highs1.slice(-15));
+  const last15Low = Math.min.apply(null, lows1.slice(-15));
+  const last30High = Math.max.apply(null, highs1.slice(-30));
+  const last30Low = Math.min.apply(null, lows1.slice(-30));
+  const compression15 = (last15High - last15Low) / last15Low;
+  const compression30 = (last30High - last30Low) / last30Low;
+  const compressionRatio = compression15 / (compression30 || 1);
+  const compressionScore = compressionRatio < 0.45 && compression15 < 0.012 ? 100 :
+                           compressionRatio < 0.55 && compression15 < 0.018 ? 85 :
+                           compressionRatio < 0.65 && compression15 < 0.025 ? 70 :
+                           compressionRatio < 0.8 ? 50 : 30;
+  
+  let obv = 0;
+  const obvHistory = [];
+  for (let i = 1; i < closes1.length; i++) {
+    if (closes1[i] > closes1[i-1]) obv += vols1[i];
+    else if (closes1[i] < closes1[i-1]) obv -= vols1[i];
+    obvHistory.push(obv);
+  }
+  const obvChange = obvHistory.length > 20 
+    ? (obvHistory[obvHistory.length-1] - obvHistory[obvHistory.length-15]) / Math.abs(obvHistory[obvHistory.length-15] || 1) : 0;
+  const priceChange1m = (closes1[closes1.length-1] - closes1[closes1.length-15]) / closes1[closes1.length-15];
+  const obvScore = obvChange > 0.2 && Math.abs(priceChange1m) < 0.01 ? 100 :
+                   obvChange > 0.1 && Math.abs(priceChange1m) < 0.015 ? 80 :
+                   obvChange > 0.05 ? 60 : obvChange > 0 ? 45 : 25;
+  
+  const supportLevel = Math.min.apply(null, lows1.slice(-30));
+  const tolerance = supportLevel * 0.001;
+  let supportTouches = 0;
+  for (let i = lows1.length - 60; i < lows1.length; i++) {
+    if (Math.abs(lows1[i] - supportLevel) < tolerance) supportTouches++;
+  }
+  let supportScore;
+  if (supportTouches >= 2 && supportTouches <= 6) supportScore = 100;
+  else if (supportTouches >= 7 && supportTouches <= 10) supportScore = 70;
+  else if (supportTouches === 1) supportScore = 50;
+  else supportScore = 30;
+  
+  let tightCandles = 0;
+  let avgCandleRange = 0;
+  for (let i = closes1.length - 20; i < closes1.length; i++) {
+    const r = (highs1[i] - lows1[i]) / lows1[i];
+    avgCandleRange += r;
+    if (r < 0.003) tightCandles++;
+  }
+  avgCandleRange /= 20;
+  const totalRange = (last30High - last30Low) / last30Low;
+  let spreadScore;
+  if (totalRange < 0.02 && avgCandleRange < 0.004 && tightCandles >= 6) spreadScore = 100;
+  else if (totalRange < 0.03 && tightCandles >= 4) spreadScore = 80;
+  else if (totalRange < 0.05 && tightCandles >= 3) spreadScore = 60;
+  else if (tightCandles >= 2) spreadScore = 45;
+  else spreadScore = 25;
+  
+  let dojiCount = 0;
+  for (let i = closes1.length - 15; i < closes1.length; i++) {
+    const body = Math.abs(closes1[i] - opens1[i]);
+    const range = highs1[i] - lows1[i];
+    if (range > 0 && body / range < 0.3) dojiCount++;
+  }
+  let silentScore;
+  if (dojiCount === 0) silentScore = 20;
+  else if (dojiCount >= 6) silentScore = 100;
+  else if (dojiCount >= 4) silentScore = 85;
+  else if (dojiCount >= 3) silentScore = 70;
+  else if (dojiCount >= 2) silentScore = 50;
+  else silentScore = 30;
+  
+  const avgVol30 = vols1.slice(-30, -10).reduce(function(a,b) { return a+b; }, 0) / 20;
+  const avgVol10 = vols1.slice(-10).reduce(function(a,b) { return a+b; }, 0) / 10;
+  const dryUpRatio = avgVol10 / (avgVol30 || 1);
+  const dryUpScore = dryUpRatio < 0.5 ? 100 : dryUpRatio < 0.65 ? 85 : dryUpRatio < 0.8 ? 70 : dryUpRatio < 0.9 ? 55 : 35;
+  
+  const price30mAgo = closes1[closes1.length - 30] || price;
+  const price60mAgo = closes1[Math.max(0, closes1.length - 60)] || price;
+  const change30m = Math.abs((price - price30mAgo) / price30mAgo);
+  const change60m = Math.abs((price - price60mAgo) / price60mAgo);
+  const timeScore = change30m < 0.008 && change60m < 0.015 ? 100 :
+                    change30m < 0.012 && change60m < 0.02 ? 85 :
+                    change30m < 0.018 ? 65 : change30m < 0.025 ? 45 : 25;
+  
+  if (Math.abs(change30m) > 0.015 && Math.abs(change60m) > 0.025) {
+    silentScore = Math.min(silentScore, 50);
+    supportScore = Math.min(supportScore, 50);
+  }
+  
+  let lowerWickCount = 0, totalLowerWickRatio = 0;
+  for (let i = closes1.length - 20; i < closes1.length; i++) {
+    const range = highs1[i] - lows1[i];
+    const lowerWick = Math.min(closes1[i], opens1[i]) - lows1[i];
+    const ratio = range > 0 ? lowerWick / range : 0;
+    if (ratio > 0.5) lowerWickCount++;
+    totalLowerWickRatio += ratio;
+  }
+  const avgLowerWick = totalLowerWickRatio / 20;
+  const wickScore = lowerWickCount >= 5 && avgLowerWick > 0.4 ? 100 :
+                    lowerWickCount >= 4 && avgLowerWick > 0.35 ? 85 :
+                    lowerWickCount >= 3 ? 70 : lowerWickCount >= 2 ? 50 : 30;
+  
+  const ema10 = calcEMA(closes1, 10);
+  const ema20 = calcEMA(closes1, 20);
+  const ema50 = calcEMA(closes1, 50);
+  const microScore = ema10 > ema20 && ema20 > ema50 && price > ema10 ? 100 :
+                     ema10 > ema20 && price > ema10 ? 85 :
+                     price > ema20 ? 65 : 35;
+  
+  let orderBookScore = 50, bidAskRatio = 1;
+  if (orderBook && orderBook.bids && orderBook.asks) {
+    const bidVolume = orderBook.bids.reduce(function(sum, b) { return sum + parseFloat(b[0]) * parseFloat(b[1]); }, 0);
+    const askVolume = orderBook.asks.reduce(function(sum, a) { return sum + parseFloat(a[0]) * parseFloat(a[1]); }, 0);
+    bidAskRatio = bidVolume / (askVolume || 1);
+    const avgBidSize = bidVolume / orderBook.bids.length;
+    const avgAskSize = askVolume / orderBook.asks.length;
+    let bigWallsBids = 0, bigWallsAsks = 0;
+    orderBook.bids.forEach(function(b) { if (parseFloat(b[0]) * parseFloat(b[1]) > avgBidSize * 4) bigWallsBids++; });
+    orderBook.asks.forEach(function(a) { if (parseFloat(a[0]) * parseFloat(a[1]) > avgAskSize * 4) bigWallsAsks++; });
+    if (bidAskRatio > 1.6 && bigWallsBids >= bigWallsAsks) orderBookScore = 100;
+    else if (bidAskRatio > 1.3) orderBookScore = 85;
+    else if (bidAskRatio > 1.1) orderBookScore = 70;
+    else if (bidAskRatio > 0.95) orderBookScore = 55;
+    else orderBookScore = 30;
+  }
+  
+  let largeTradesScore = 50, largeBuys = 0, largeSells = 0;
+  if (Array.isArray(trades) && trades.length > 0) {
+    const tradeValues = trades.map(function(tr) { return parseFloat(tr.p) * parseFloat(tr.q); });
+    const avgTradeValue = tradeValues.reduce(function(a,b) { return a+b; }, 0) / tradeValues.length;
+    const threshold = avgTradeValue * 6;
+    trades.forEach(function(tr) {
+      const value = parseFloat(tr.p) * parseFloat(tr.q);
+      if (value > threshold) { if (tr.m === false) largeBuys++; else largeSells++; }
+    });
+    const totalLarge = largeBuys + largeSells;
+    if (totalLarge > 0) {
+      const buyRatio = largeBuys / totalLarge;
+      if (buyRatio > 0.7 && largeBuys >= 4) largeTradesScore = 100;
+      else if (buyRatio > 0.6 && largeBuys >= 3) largeTradesScore = 85;
+      else if (buyRatio > 0.52) largeTradesScore = 70;
+      else if (buyRatio > 0.45) largeTradesScore = 50;
+      else largeTradesScore = 30;
+    }
+  }
+  
+  let takerScore = 50, takerBuyRatio = 0.5;
+  const recentTakerBuy = takerBuy1.slice(-15).reduce(function(a,b) { return a+b; }, 0);
+  const recentTotalVol = vols1.slice(-15).reduce(function(a,b) { return a+b; }, 0);
+  if (recentTotalVol > 0) {
+    takerBuyRatio = recentTakerBuy / recentTotalVol;
+    if (takerBuyRatio > 0.6) takerScore = 100;
+    else if (takerBuyRatio > 0.55) takerScore = 85;
+    else if (takerBuyRatio > 0.51) takerScore = 70;
+    else if (takerBuyRatio > 0.48) takerScore = 55;
+    else if (takerBuyRatio > 0.44) takerScore = 35;
+    else takerScore = 20;
+  }
+  
+  let totalVP = 0, totalV = 0;
+  for (let i = 0; i < closes1.length; i++) {
+    const tp = (highs1[i] + lows1[i] + closes1[i]) / 3;
+    totalVP += tp * vols1[i];
+    totalV += vols1[i];
+  }
+  const vwap = totalV > 0 ? totalVP / totalV : price;
+  const vwapDeviation = (price - vwap) / vwap;
+  let vwapScore = 50;
+  if (Math.abs(vwapDeviation) < 0.004 && takerBuyRatio > 0.5) vwapScore = 100;
+  else if (Math.abs(vwapDeviation) < 0.007) vwapScore = 85;
+  else if (vwapDeviation > -0.012 && vwapDeviation < 0.012) vwapScore = 70;
+  else if (vwapDeviation > 0.025) vwapScore = 35;
+  else vwapScore = 50;
+  
+  const tenkan = (Math.max.apply(null, highs5.slice(-9)) + Math.min.apply(null, lows5.slice(-9))) / 2;
+  const kijun = (Math.max.apply(null, highs5.slice(-26)) + Math.min.apply(null, lows5.slice(-26))) / 2;
+  const senkouA = (tenkan + kijun) / 2;
+  const senkouB = (Math.max.apply(null, highs5.slice(-52)) + Math.min.apply(null, lows5.slice(-52))) / 2;
+  const cloudTop = Math.max(senkouA, senkouB);
+  const cloudBottom = Math.min(senkouA, senkouB);
+  let ichimokuScore = 50;
+  if (price > cloudTop && tenkan > kijun) ichimokuScore = 100;
+  else if (price > cloudTop) ichimokuScore = 85;
+  else if (price > cloudBottom && tenkan > kijun) ichimokuScore = 75;
+  else if (price > cloudBottom) ichimokuScore = 55;
+  else ichimokuScore = 30;
+  
+  let smartMoneySignals = 0;
+  if (whaleScore >= 70) smartMoneySignals++;
+  if (largeTradesScore >= 70) smartMoneySignals++;
+  if (takerScore >= 70) smartMoneySignals++;
+  if (obvScore >= 70) smartMoneySignals++;
+  if (orderBookScore >= 70) smartMoneySignals++;
+  if (dryUpScore >= 70) smartMoneySignals++;
+  const smartMoneyScore = smartMoneySignals >= 5 ? 100 : smartMoneySignals >= 4 ? 85 : smartMoneySignals >= 3 ? 70 : smartMoneySignals >= 2 ? 55 : 30;
+  
+  const fibHigh = Math.max.apply(null, highs1h.slice(-50));
+  const fibLow = Math.min.apply(null, lows1h.slice(-50));
+  const fibRange = fibHigh - fibLow;
+  const fibLevels = {
+    '23.6': fibHigh - fibRange * 0.236,
+    '38.2': fibHigh - fibRange * 0.382,
+    '50.0': fibHigh - fibRange * 0.500,
+    '61.8': fibHigh - fibRange * 0.618,
+    '78.6': fibHigh - fibRange * 0.786
+  };
+  let nearFib = null, minDist = Infinity;
+  for (const level in fibLevels) {
+    const dist = Math.abs(price - fibLevels[level]) / price;
+    if (dist < minDist) { minDist = dist; nearFib = level; }
+  }
+  const fibScore = minDist < 0.004 && ['38.2','50.0','61.8'].indexOf(nearFib) >= 0 ? 100 :
+                   minDist < 0.007 ? 85 : minDist < 0.012 ? 65 : 40;
+  
+  const recent20High = Math.max.apply(null, highs1.slice(-20));
+  const recent20Low = Math.min.apply(null, lows1.slice(-20));
+  const distToHigh = (recent20High - price) / price;
+  const distToLow = (price - recent20Low) / price;
+  let liquidationScore = 50;
+  if (distToHigh < 0.008) liquidationScore = 100;
+  else if (distToHigh < 0.015) liquidationScore = 85;
+  else if (distToHigh < 0.025) liquidationScore = 70;
+  else if (distToLow < 0.015) liquidationScore = 35;
+  
+  const last50_5m = closes5.slice(-50);
+  const wave1Low = Math.min.apply(null, last50_5m.slice(0, 20));
+  const wave1High = Math.max.apply(null, last50_5m.slice(15, 35));
+  const wave2Low = Math.min.apply(null, last50_5m.slice(30, 50));
+  const wave1Size = (wave1High - wave1Low) / wave1Low;
+  const wave2Retrace = (wave1High - wave2Low) / (wave1High - wave1Low);
+  const elliottScore = wave1Size > 0.04 && wave2Retrace > 0.35 && wave2Retrace < 0.75 ? 100 :
+                       wave1Size > 0.025 && wave2Retrace > 0.3 && wave2Retrace < 0.8 ? 85 :
+                       wave2Retrace < 0.9 ? 60 : 35;
+  
+  const rsi1m = calcRSI(closes1, 14);
+  const rsi5m = calcRSI(closes5, 14);
+  const rsi15m = calcRSI(closes15, 14);
+  const rsi1h_v = calcRSI(closes1h, 14);
+  let alignmentScore = 0;
+  if (rsi1m > 40 && rsi1m < 80) alignmentScore += 25;
+  if (rsi5m > 40 && rsi5m < 80) alignmentScore += 25;
+  if (rsi15m > 35 && rsi15m < 80) alignmentScore += 25;
+  if (rsi1h_v > 35 && rsi1h_v < 80) alignmentScore += 25;
+  
+  /* Funding + OI + Top Traders (Futures فقط) */
+  let fundingScore = 50, fundingRate = 0;
+  if (isFutures && fundingData && fundingData.lastFundingRate !== undefined) {
+    fundingRate = parseFloat(fundingData.lastFundingRate) * 100;
+    if (fundingRate < -0.05) fundingScore = 100;
+    else if (fundingRate < -0.02) fundingScore = 90;
+    else if (fundingRate < 0) fundingScore = 80;
+    else if (fundingRate < 0.01) fundingScore = 70;
+    else if (fundingRate < 0.03) fundingScore = 55;
+    else if (fundingRate < 0.06) fundingScore = 35;
+    else fundingScore = 20;
+  }
+  
+  let openIntScore = 50, oiValue = 0;
+  if (isFutures && oiData && oiData.openInterest) {
+    oiValue = parseFloat(oiData.openInterest);
+    const oiPerVol = oiValue / ((vol24h / 1_000_000) || 1);
+    if (oiPerVol > 100) openIntScore = 100;
+    else if (oiPerVol > 50) openIntScore = 85;
+    else if (oiPerVol > 20) openIntScore = 70;
+    else if (oiPerVol > 5) openIntScore = 55;
+    else openIntScore = 40;
+  }
+  
+  let topTraderScore = 50, topTraderRatio = 1;
+  if (isFutures && Array.isArray(topLS) && topLS.length >= 2) {
+    topTraderRatio = parseFloat(topLS[topLS.length - 1].longShortRatio);
+    const firstTop = parseFloat(topLS[0].longShortRatio);
+    const topTrend = topTraderRatio - firstTop;
+    if (topTraderRatio > 1.5 && topTrend > 0.05) topTraderScore = 100;
+    else if (topTraderRatio > 1.3 && topTrend > 0) topTraderScore = 85;
+    else if (topTraderRatio > 1.1) topTraderScore = 70;
+    else if (topTraderRatio > 0.9) topTraderScore = 55;
+    else if (topTraderRatio < 0.7) topTraderScore = 30;
+    else topTraderScore = 45;
+  }
+  
+  /* حساب النتيجة */
+  let explodeScore;
+  if (isFutures) {
+    explodeScore = Math.round(
+      whaleScore * 0.10 +
+      orderBookScore * 0.09 +
+      largeTradesScore * 0.08 +
+      takerScore * 0.08 +
+      smartMoneyScore * 0.08 +
+      compressionScore * 0.07 +
+      obvScore * 0.07 +
+      dryUpScore * 0.06 +
+      supportScore * 0.05 +
+      wickScore * 0.05 +
+      silentScore * 0.04 +
+      microScore * 0.04 +
+      spreadScore * 0.03 +
+      timeScore * 0.03 +
+      vwapScore * 0.03 +
+      ichimokuScore * 0.02 +
+      fibScore * 0.02 +
+      liquidationScore * 0.02 +
+      elliottScore * 0.02 +
+      alignmentScore * 0.02 +
+      fundingScore * 0.05 +
+      openIntScore * 0.04 +
+      topTraderScore * 0.04
+    );
+  } else {
+    explodeScore = Math.round(
+      whaleScore * 0.10 +
+      orderBookScore * 0.09 +
+      largeTradesScore * 0.08 +
+      takerScore * 0.08 +
+      smartMoneyScore * 0.08 +
+      compressionScore * 0.07 +
+      obvScore * 0.07 +
+      dryUpScore * 0.06 +
+      supportScore * 0.05 +
+      wickScore * 0.05 +
+      silentScore * 0.04 +
+      microScore * 0.04 +
+      spreadScore * 0.03 +
+      timeScore * 0.03 +
+      vwapScore * 0.03 +
+      ichimokuScore * 0.02 +
+      fibScore * 0.02 +
+      liquidationScore * 0.02 +
+      elliottScore * 0.02 +
+      alignmentScore * 0.02
+    );
+  }
+  
+  const baseScore = explodeScore;
+  const warnings = [];
+  const bonuses = [];
+  const deductions = [];
+  
+  const backtest = runBacktestAccumulation(k1m);
+  
+  let bonus = 0;
+  if (whaleScore >= 70) {
+    if (compressionScore >= 70 && obvScore >= 70) { bonus += 10; warnings.push('🌟 إشارة ذهبية'); bonuses.push({label: '🌟 إشارة ذهبية', value: 10}); }
+    if (orderBookScore >= 80 && largeTradesScore >= 80 && takerScore >= 70) { bonus += 10; warnings.push('🐋 تجميع مؤسسي'); bonuses.push({label: '🐋 تجميع مؤسسي', value: 10}); }
+    if (smartMoneyScore >= 85) { bonus += 8; warnings.push('💎 الأموال الذكية'); bonuses.push({label: '💎 الأموال الذكية', value: 8}); }
+    if (isFutures && fundingScore >= 85 && openIntScore >= 85) { bonus += 8; warnings.push('💥 Futures مثالي'); bonuses.push({label: '💥 Futures مثالي', value: 8}); }
+    if (isFutures && topTraderScore >= 85) { bonus += 5; warnings.push('🐳 المحافظ Long'); bonuses.push({label: '🐳 المحافظ Long', value: 5}); }
+  } else {
+    bonuses.push({label: '🚪 بوابة: الحوت ضعيف - لا بونص', value: 0});
+  }
+  
+  const allScores = [whaleScore, compressionScore, obvScore, supportScore, spreadScore, 
+                     silentScore, dryUpScore, timeScore, wickScore, microScore,
+                     orderBookScore, largeTradesScore, takerScore, vwapScore, 
+                     ichimokuScore, smartMoneyScore, fibScore, liquidationScore, 
+                     elliottScore, alignmentScore];
+  if (isFutures) {
+    allScores.push(fundingScore, openIntScore, topTraderScore);
+  }
+  const highCount = allScores.filter(function(s) { return s >= 70; }).length;
+  const totalIndicators = isFutures ? 23 : 20;
+  
+  if (whaleScore >= 70) {
+    if (highCount >= totalIndicators - 3) { bonus += 20; bonuses.push({label: '🎯 ' + highCount + '/' + totalIndicators + ' مؤشر قوي', value: 20}); }
+    else if (highCount >= totalIndicators - 6) { bonus += 12; bonuses.push({label: '🎯 ' + highCount + '/' + totalIndicators + ' مؤشر قوي', value: 12}); }
+    else if (highCount >= totalIndicators - 9) { bonus += 6; bonuses.push({label: '🎯 ' + highCount + '/' + totalIndicators + ' مؤشر قوي', value: 6}); }
+  } else {
+    if (highCount >= totalIndicators - 6) { bonus += 6; bonuses.push({label: '🎯 ' + highCount + '/' + totalIndicators + ' (حوت ضعيف)', value: 6}); }
+  }
+  
+  if (backtest.total >= 3) {
+    const btWinRate = parseFloat(backtest.winRate);
+    if (btWinRate < 20) {
+      const cap = 60;
+      if (baseScore + bonus > cap) {
+        deductions.push({label: '🚫 Backtest فاشل (' + btWinRate + '%)', value: cap - (baseScore + bonus)});
+        warnings.push('🚫 Backtest فاشل');
+      }
+      explodeScore = Math.min(cap, baseScore + bonus);
+    } else if (btWinRate < 40) {
+      const cap = 72;
+      if (baseScore + bonus > cap) {
+        deductions.push({label: '⚠️ Backtest ضعيف (' + btWinRate + '%)', value: cap - (baseScore + bonus)});
+        warnings.push('⚠️ Backtest ضعيف');
+      }
+      explodeScore = Math.min(cap, baseScore + bonus);
+    } else if (btWinRate < 55) {
+      const cap = 85;
+      if (baseScore + bonus > cap) {
+        deductions.push({label: '📊 Backtest متوسط (' + btWinRate + '%)', value: cap - (baseScore + bonus)});
+      }
+      explodeScore = Math.min(cap, baseScore + bonus);
+    } else {
+      explodeScore = Math.min(100, baseScore + bonus);
+    }
+  } else {
+    explodeScore = Math.min(90, baseScore + bonus);
+    deductions.push({label: '⚠️ Backtest ناقص', value: Math.min(90, baseScore + bonus) - (baseScore + bonus)});
+  }
+  
+  if (change24h > 15) { explodeScore -= 15; warnings.push('⚠️ ارتفعت مسبقاً'); deductions.push({label: '⚠️ ارتفاع مسبق', value: -15}); }
+  else if (change24h > 10) { explodeScore -= 8; deductions.push({label: '⚠️ ارتفاع متوسط', value: -8}); }
+  
+  const last10Max = Math.max.apply(null, highs1.slice(-10));
+  if ((last10Max - price) / price > 0.08) { explodeScore -= 10; warnings.push('⚠️ انفجار سابق'); deductions.push({label: '⚠️ انفجار سابق', value: -10}); }
+  
+  if (vol24h < 2_000_000) { explodeScore -= 15; warnings.push('⚠️ سيولة ضعيفة'); deductions.push({label: '⚠️ سيولة ضعيفة', value: -15}); }
+  
+  if (rsi5m > 82) { explodeScore -= 8; warnings.push('⚠️ RSI مشبع'); deductions.push({label: '⚠️ RSI مشبع', value: -8}); }
+  
+  if (isFutures && fundingRate > 0.1) { explodeScore -= 8; warnings.push('⚠️ Funding مرتفع'); deductions.push({label: '⚠️ Funding مرتفع', value: -8}); }
+  
+  const weakCount = allScores.filter(function(s) { return s < 40; }).length;
+  if (weakCount >= 8) { explodeScore -= 15; deductions.push({label: '⚠️ ' + weakCount + ' مؤشر ضعيف', value: -15}); }
+  else if (weakCount >= 5) { explodeScore -= 10; deductions.push({label: '⚠️ ' + weakCount + ' مؤشر ضعيف', value: -10}); }
+  
+  if (baseScore < 80 && (explodeScore - baseScore) > 15) {
+    const cap = baseScore + 15;
+    if (explodeScore > cap) {
+      deductions.push({label: '🔒 سقف: أساس ضعيف - بونص محدود', value: cap - explodeScore});
+      explodeScore = cap;
+    }
+  }
+  
+  const gatesApplied = [];
+  
+  if (whaleCandles < 3) {
+    const cap = whaleCandles < 2 ? 65 : 80;
+    if (explodeScore > cap) {
+      deductions.push({label: '🚪 بوابة الحوت', value: cap - explodeScore});
+      explodeScore = cap;
+      gatesApplied.push('🐋 الحوت ضعيف (' + whaleCandles + ')');
+    }
+  }
+  
+  const coreStrong = [whaleScore, orderBookScore, largeTradesScore, takerScore, smartMoneyScore].filter(function(s) { return s >= 70; }).length;
+  if (coreStrong < 4) {
+    const cap = coreStrong < 2 ? 50 : coreStrong < 3 ? 65 : 80;
+    if (explodeScore > cap) {
+      deductions.push({label: '🚪 بوابة الأساسية', value: cap - explodeScore});
+      explodeScore = cap;
+      gatesApplied.push('💎 أساسية (' + coreStrong + '/5)');
+    }
+  }
+  
+  if (Math.abs(change30m) > 0.025) {
+    const cap = 70;
+    if (explodeScore > cap) {
+      deductions.push({label: '🚪 بوابة الحركة', value: cap - explodeScore});
+      explodeScore = cap;
+      gatesApplied.push('⚡ تحرك سريع');
+    }
+  }
+  
+  if (bidAskRatio < 0.7) {
+    const cap = 70;
+    if (explodeScore > cap) {
+      deductions.push({label: '🚪 بوابة B/A', value: cap - explodeScore});
+      explodeScore = cap;
+      gatesApplied.push('📊 B/A ' + bidAskRatio.toFixed(2));
+    }
+  }
+  
+  if (obvChange < -0.05) {
+    const cap = 72;
+    if (explodeScore > cap) {
+      deductions.push({label: '🚪 بوابة OBV', value: cap - explodeScore});
+      explodeScore = cap;
+      gatesApplied.push('📉 OBV ' + (obvChange*100).toFixed(1) + '%');
+    }
+  }
+  
+  if (price < cloudBottom && takerBuyRatio < 0.48) {
+    const cap = 68;
+    if (explodeScore > cap) {
+      deductions.push({label: '🚪 بوابة السحابة', value: cap - explodeScore});
+      explodeScore = cap;
+      gatesApplied.push('☁️ تحت السحابة');
+    }
+  }
+  
+  if (explodeScore >= 98) {
+    const btWinRate = parseFloat(backtest.winRate);
+    if (baseScore < 90 || highCount < totalIndicators - 3 || btWinRate < 55 || whaleCandles < 4) {
+      deductions.push({label: '🔒 سقف 95%', value: -3});
+      explodeScore = 95;
+      gatesApplied.push('🎯 100% صعب');
+    }
+  }
+  
+  const veryWeakCount = allScores.filter(function(s) { return s < 30; }).length;
+  if (veryWeakCount >= 4) {
+    const cap = 75;
+    if (explodeScore > cap) {
+      deductions.push({label: '🚪 بوابة ضعف', value: cap - explodeScore});
+      explodeScore = cap;
+      gatesApplied.push('⚠️ ' + veryWeakCount + ' ضعيف جداً');
+    }
+  }
+  
+  if (isFutures && fundingRate > 0.08) {
+    const cap = 78;
+    if (explodeScore > cap) {
+      deductions.push({label: '🚪 بوابة Funding', value: cap - explodeScore});
+      explodeScore = cap;
+      gatesApplied.push('💸 Funding مرتفع');
+    }
+  }
+  
+  explodeScore = Math.max(0, Math.min(100, explodeScore));
+  
+  const confidence = Math.round((highCount / totalIndicators) * 100);
+  
+  let level, levelClass, timing;
+  const btWinRateFinal = parseFloat(backtest.winRate);
+  if (explodeScore >= 92 && confidence >= 87 && whaleCandles >= 4 && btWinRateFinal >= 55) { 
+    level = '💎 نخبة — انفجار مؤكد'; levelClass = 'elite'; timing = '⚡ ادخل الآن'; 
+  }
+  else if (explodeScore >= 85 && whaleCandles >= 3 && btWinRateFinal >= 40) { 
+    level = '🚀 انفجار خلال 5 دقائق'; levelClass = 'ultra'; timing = '⚡ ادخل الآن'; 
+  }
+  else if (explodeScore >= 72) { level = '🔥 انفجار خلال 10-15 دقيقة'; levelClass = 'strong'; timing = '⏰ استعد'; }
+  else if (explodeScore >= 58) { level = '⚡ تجميع نشط'; levelClass = 'medium'; timing = '👀 راقب'; }
+  else { level = '📡 تجميع مبكر'; levelClass = 'weak'; timing = '⏳ في المراقبة'; }
+  
+  const signals = {
+    whale:       { score: Math.round(whaleScore), label: whaleCandles + ' شمعة' },
+    compression: { score: Math.round(compressionScore), label: (compression15*100).toFixed(2) + '%' },
+    obv:         { score: Math.round(obvScore), label: (obvChange*100).toFixed(0) + '%' },
+    support:     { score: Math.round(supportScore), label: supportTouches + ' لمسات' },
+    spread:      { score: Math.round(spreadScore), label: tightCandles + ' شمعة' },
+    silent:      { score: Math.round(silentScore), label: dojiCount + ' دوجي' },
+    dryUp:       { score: Math.round(dryUpScore), label: '×' + dryUpRatio.toFixed(2) },
+    time:        { score: Math.round(timeScore), label: (change30m*100).toFixed(2) + '%' },
+    wick:        { score: Math.round(wickScore), label: lowerWickCount + ' ذيول' },
+    micro:       { score: Math.round(microScore), label: ema10 > ema20 ? '✅ صاعد' : '⏸️ محايد' },
+    orderBook:   { score: Math.round(orderBookScore), label: 'B/A ' + bidAskRatio.toFixed(2) },
+    largeTrades: { score: Math.round(largeTradesScore), label: largeBuys + ' شراء' },
+    taker:       { score: Math.round(takerScore), label: (takerBuyRatio*100).toFixed(0) + '%' },
+    vwap:        { score: Math.round(vwapScore), label: (vwapDeviation*100).toFixed(2) + '%' },
+    ichimoku:    { score: Math.round(ichimokuScore), label: price > cloudTop ? '✅ فوق' : '⏸️ تحت' },
+    smartMoney:  { score: Math.round(smartMoneyScore), label: smartMoneySignals + '/6' },
+    fib:         { score: Math.round(fibScore), label: nearFib ? nearFib + '%' : '—' },
+    liquidation: { score: Math.round(liquidationScore), label: (distToHigh*100).toFixed(2) + '%' },
+    elliott:     { score: Math.round(elliottScore), label: wave2Retrace > 0.35 && wave2Retrace < 0.75 ? '✅ موجة 2' : '—' },
+    alignment:   { score: Math.round(alignmentScore), label: (alignmentScore/25) + '/4 TF' }
+  };
+  
+  if (isFutures) {
+    signals.funding = { score: Math.round(fundingScore), label: fundingRate.toFixed(3) + '%' };
+    signals.openInt = { score: Math.round(openIntScore), label: oiValue > 1000 ? (oiValue/1000).toFixed(0) + 'K' : oiValue.toFixed(0) };
+    signals.topTrader = { score: Math.round(topTraderScore), label: topTraderRatio.toFixed(2) };
+  }
+  
+  return {
+    symbol: symbol, name: symbol.replace('USDT',''),
+    price: price, change: change24h, volume: vol24h,
+    explodeScore: explodeScore, baseScore: baseScore, confidence: confidence,
+    level: level, levelClass: levelClass, timing: timing, warnings: warnings,
+    bonuses: bonuses, deductions: deductions, gatesApplied: gatesApplied,
+    whaleCandles: whaleCandles, compressionRatio: compressionRatio, obvChange: obvChange, 
+    dryUpRatio: dryUpRatio, supportTouches: supportTouches,
+    dojiCount: dojiCount, tightCandles: tightCandles, lowerWickCount: lowerWickCount, rsi5: rsi5m,
+    bidAskRatio: bidAskRatio, largeBuys: largeBuys, largeSells: largeSells, takerBuyRatio: takerBuyRatio,
+    fundingRate: fundingRate, oiValue: oiValue, topTraderRatio: topTraderRatio,
+    backtest: backtest,
+    direction: 'LONG',
+    market: scanMarket,
+    timing_type: 'normal',
+    totalIndicators: totalIndicators,
+    entry: price, target1: price * 1.03, target2: price * 1.07, target3: price * 1.15, stop: price * 0.982,
+    signals: signals
+  };
+}
+
+/* ============ تحليل Short ============ */
+async function analyzeDumpDeep(t) {
+  const symbol = t.symbol;
+  const isFutures = scanMarket === 'futures';
+  
+  if (!isFutures) return null;
+  
+  const results = await Promise.all([
+    getKlines(symbol, '1m', 200),
+    getKlines(symbol, '5m', 100),
+    getKlines(symbol, '15m', 50),
+    getKlines(symbol, '1h', 50),
+    getDepth(symbol),
+    getTrades(symbol),
+    safeFetch(FAPI + '/fapi/v1/premiumIndex?symbol=' + symbol),
+    safeFetch(FAPI + '/fapi/v1/openInterest?symbol=' + symbol),
+    safeFetch(FAPI + '/futures/data/topLongShortPositionRatio?symbol=' + symbol + '&period=5m&limit=30')
+  ]);
+  
+  const k1m = results[0], k5m = results[1], k15m = results[2], k1h = results[3];
+  const orderBook = results[4], trades = results[5], fundingData = results[6];
+  const oiData = results[7], topLS = results[8];
+  
+  if (!Array.isArray(k1m) || k1m.length < 30) return null;
+  
+  const closes1   = k1m.map(function(k) { return parseFloat(k[4]); });
+  const highs1    = k1m.map(function(k) { return parseFloat(k[2]); });
+  const lows1     = k1m.map(function(k) { return parseFloat(k[3]); });
+  const opens1    = k1m.map(function(k) { return parseFloat(k[1]); });
+  const vols1     = k1m.map(function(k) { return parseFloat(k[5]); });
+  const trades1   = k1m.map(function(k) { return parseFloat(k[8]); });
+  const takerBuy1 = k1m.map(function(k) { return parseFloat(k[9]); });
+  
+  const closes5  = (Array.isArray(k5m) && k5m.length > 20) ? k5m.map(function(k) { return parseFloat(k[4]); }) : closes1;
+  const highs5   = (Array.isArray(k5m) && k5m.length > 20) ? k5m.map(function(k) { return parseFloat(k[2]); }) : highs1;
+  const lows5    = (Array.isArray(k5m) && k5m.length > 20) ? k5m.map(function(k) { return parseFloat(k[3]); }) : lows1;
+  const closes15 = (Array.isArray(k15m) && k15m.length > 20) ? k15m.map(function(k) { return parseFloat(k[4]); }) : closes1;
+  const closes1h = (Array.isArray(k1h) && k1h.length > 20) ? k1h.map(function(k) { return parseFloat(k[4]); }) : closes1;
+  const highs1h  = (Array.isArray(k1h) && k1h.length > 20) ? k1h.map(function(k) { return parseFloat(k[2]); }) : highs1;
+  const lows1h   = (Array.isArray(k1h) && k1h.length > 20) ? k1h.map(function(k) { return parseFloat(k[3]); }) : lows1;
+  
+  const price = closes1[closes1.length - 1];
+  const vol24h = parseFloat(t.quoteVolume);
+  const change24h = parseFloat(t.priceChangePercent);
+  
+  const avgVol20 = vols1.slice(-20).reduce(function(a,b) { return a+b; }, 0) / 20;
+  const avgTrades20 = trades1.slice(-20).reduce(function(a,b) { return a+b; }, 0) / 20;
+  let dumpCandles = 0;
+  for (let i = closes1.length - 20; i < closes1.length; i++) {
+    const body = Math.abs(closes1[i] - opens1[i]);
+    const range = highs1[i] - lows1[i];
+    const bodyRatio = body / (range || 1);
+    if (closes1[i] < opens1[i] && bodyRatio < 0.4 && vols1[i] > avgVol20 * 1.3 && trades1[i] > avgTrades20 * 1.2 && range / price < 0.012) dumpCandles++;
+  }
+  const dumpScore = dumpCandles >= 5 ? 100 : dumpCandles >= 4 ? 85 : dumpCandles >= 3 ? 70 : dumpCandles >= 2 ? 50 : 25;
+  
+  const last15High = Math.max.apply(null, highs1.slice(-15));
+  const last15Low = Math.min.apply(null, lows1.slice(-15));
+  const last30High = Math.max.apply(null, highs1.slice(-30));
+  const last30Low = Math.min.apply(null, lows1.slice(-30));
+  const compression15 = (last15High - last15Low) / last15Low;
+  const compression30 = (last30High - last30Low) / last30Low;
+  const compressionRatio = compression15 / (compression30 || 1);
+  const distTo15High = (last15High - price) / price;
+  const nearTop = distTo15High < 0.01;
+  const compressionScore = (compressionRatio < 0.45 && compression15 < 0.012 && nearTop) ? 100 :
+                           (compressionRatio < 0.55 && compression15 < 0.018) ? 85 :
+                           compressionRatio < 0.65 && compression15 < 0.025 ? 70 :
+                           compressionRatio < 0.8 ? 50 : 30;
+  
+  let obv = 0;
+  const obvHistory = [];
+  for (let i = 1; i < closes1.length; i++) {
+    if (closes1[i] > closes1[i-1]) obv += vols1[i];
+    else if (closes1[i] < closes1[i-1]) obv -= vols1[i];
+    obvHistory.push(obv);
+  }
+  const obvChange = obvHistory.length > 20 
+    ? (obvHistory[obvHistory.length-1] - obvHistory[obvHistory.length-15]) / Math.abs(obvHistory[obvHistory.length-15] || 1) : 0;
+  const priceChange1m = (closes1[closes1.length-1] - closes1[closes1.length-15]) / closes1[closes1.length-15];
+  const obvScore = obvChange < -0.2 && Math.abs(priceChange1m) < 0.01 ? 100 :
+                   obvChange < -0.1 && Math.abs(priceChange1m) < 0.015 ? 80 :
+                   obvChange < -0.05 ? 60 : obvChange < 0 ? 45 : 25;
+  
+  const resistanceLevel = Math.max.apply(null, highs1.slice(-30));
+  const tolerance = resistanceLevel * 0.001;
+  let resistanceTouches = 0;
+  for (let i = highs1.length - 60; i < highs1.length; i++) {
+    if (Math.abs(highs1[i] - resistanceLevel) < tolerance) resistanceTouches++;
+  }
+  let supportScore;
+  if (resistanceTouches >= 2 && resistanceTouches <= 6) supportScore = 100;
+  else if (resistanceTouches >= 7 && resistanceTouches <= 10) supportScore = 70;
+  else if (resistanceTouches === 1) supportScore = 50;
+  else supportScore = 30;
+  
+  let tightCandles = 0;
+  let avgCandleRange = 0;
+  for (let i = closes1.length - 20; i < closes1.length; i++) {
+    const r = (highs1[i] - lows1[i]) / lows1[i];
+    avgCandleRange += r;
+    if (r < 0.003) tightCandles++;
+  }
+  avgCandleRange /= 20;
+  const totalRange = (last30High - last30Low) / last30Low;
+  let spreadScore;
+  if (totalRange < 0.02 && avgCandleRange < 0.004 && tightCandles >= 6) spreadScore = 100;
+  else if (totalRange < 0.03 && tightCandles >= 4) spreadScore = 80;
+  else if (totalRange < 0.05 && tightCandles >= 3) spreadScore = 60;
+  else if (tightCandles >= 2) spreadScore = 45;
+  else spreadScore = 25;
+  
+  let dojiCount = 0;
+  for (let i = closes1.length - 15; i < closes1.length; i++) {
+    const body = Math.abs(closes1[i] - opens1[i]);
+    const range = highs1[i] - lows1[i];
+    if (range > 0 && body / range < 0.3) dojiCount++;
+  }
+  let silentScore;
+  if (dojiCount === 0) silentScore = 20;
+  else if (dojiCount >= 6) silentScore = 100;
+  else if (dojiCount >= 4) silentScore = 85;
+  else if (dojiCount >= 3) silentScore = 70;
+  else if (dojiCount >= 2) silentScore = 50;
+  else silentScore = 30;
+  
+  const avgVol30 = vols1.slice(-30, -10).reduce(function(a,b) { return a+b; }, 0) / 20;
+  const avgVol10 = vols1.slice(-10).reduce(function(a,b) { return a+b; }, 0) / 10;
+  const dryUpRatio = avgVol10 / (avgVol30 || 1);
+  const dryUpScore = dryUpRatio < 0.5 ? 100 : dryUpRatio < 0.65 ? 85 : dryUpRatio < 0.8 ? 70 : dryUpRatio < 0.9 ? 55 : 35;
+  
+  const price30mAgo = closes1[closes1.length - 30] || price;
+  const price60mAgo = closes1[Math.max(0, closes1.length - 60)] || price;
+  const change30m = Math.abs((price - price30mAgo) / price30mAgo);
+  const change60m = Math.abs((price - price60mAgo) / price60mAgo);
+  const timeScore = change30m < 0.008 && change60m < 0.015 ? 100 :
+                    change30m < 0.012 && change60m < 0.02 ? 85 :
+                    change30m < 0.018 ? 65 : change30m < 0.025 ? 45 : 25;
+  
+  let upperWickCount = 0, totalUpperWickRatio = 0;
+  for (let i = closes1.length - 20; i < closes1.length; i++) {
+    const range = highs1[i] - lows1[i];
+    const upperWick = highs1[i] - Math.max(closes1[i], opens1[i]);
+    const ratio = range > 0 ? upperWick / range : 0;
+    if (ratio > 0.5) upperWickCount++;
+    totalUpperWickRatio += ratio;
+  }
+  const avgUpperWick = totalUpperWickRatio / 20;
+  const wickScore = upperWickCount >= 5 && avgUpperWick > 0.4 ? 100 :
+                    upperWickCount >= 4 && avgUpperWick > 0.35 ? 85 :
+                    upperWickCount >= 3 ? 70 : upperWickCount >= 2 ? 50 : 30;
+  
+  const ema10 = calcEMA(closes1, 10);
+  const ema20 = calcEMA(closes1, 20);
+  const ema50 = calcEMA(closes1, 50);
+  const microScore = ema10 < ema20 && ema20 < ema50 && price < ema10 ? 100 :
+                     ema10 < ema20 && price < ema10 ? 85 :
+                     price < ema20 ? 65 : 35;
+  
+  let orderBookScore = 50, bidAskRatio = 1;
+  if (orderBook && orderBook.bids && orderBook.asks) {
+    const bidVolume = orderBook.bids.reduce(function(sum, b) { return sum + parseFloat(b[0]) * parseFloat(b[1]); }, 0);
+    const askVolume = orderBook.asks.reduce(function(sum, a) { return sum + parseFloat(a[0]) * parseFloat(a[1]); }, 0);
+    bidAskRatio = bidVolume / (askVolume || 1);
+    if (bidAskRatio < 0.6) orderBookScore = 100;
+    else if (bidAskRatio < 0.75) orderBookScore = 85;
+    else if (bidAskRatio < 0.9) orderBookScore = 70;
+    else if (bidAskRatio < 1.05) orderBookScore = 55;
+    else orderBookScore = 30;
+  }
+  
+  let largeTradesScore = 50, largeBuys = 0, largeSells = 0;
+  if (Array.isArray(trades) && trades.length > 0) {
+    const tradeValues = trades.map(function(tr) { return parseFloat(tr.p) * parseFloat(tr.q); });
+    const avgTradeValue = tradeValues.reduce(function(a,b) { return a+b; }, 0) / tradeValues.length;
+    const threshold = avgTradeValue * 6;
+    trades.forEach(function(tr) {
+      const value = parseFloat(tr.p) * parseFloat(tr.q);
+      if (value > threshold) { if (tr.m === false) largeBuys++; else largeSells++; }
+    });
+    const totalLarge = largeBuys + largeSells;
+    if (totalLarge > 0) {
+      const sellRatio = largeSells / totalLarge;
+      if (sellRatio > 0.7 && largeSells >= 4) largeTradesScore = 100;
+      else if (sellRatio > 0.6 && largeSells >= 3) largeTradesScore = 85;
+      else if (sellRatio > 0.52) largeTradesScore = 70;
+      else if (sellRatio > 0.45) largeTradesScore = 50;
+      else largeTradesScore = 30;
+    }
+  }
+  
+  let takerScore = 50, takerBuyRatio = 0.5;
+  const recentTakerBuy = takerBuy1.slice(-15).reduce(function(a,b) { return a+b; }, 0);
+  const recentTotalVol = vols1.slice(-15).reduce(function(a,b) { return a+b; }, 0);
+  if (recentTotalVol > 0) {
+    takerBuyRatio = recentTakerBuy / recentTotalVol;
+    if (takerBuyRatio < 0.4) takerScore = 100;
+    else if (takerBuyRatio < 0.45) takerScore = 85;
+    else if (takerBuyRatio < 0.49) takerScore = 70;
+    else if (takerBuyRatio < 0.52) takerScore = 55;
+    else if (takerBuyRatio < 0.56) takerScore = 35;
+    else takerScore = 20;
+  }
+  
+  let totalVP = 0, totalV = 0;
+  for (let i = 0; i < closes1.length; i++) {
+    const tp = (highs1[i] + lows1[i] + closes1[i]) / 3;
+    totalVP += tp * vols1[i];
+    totalV += vols1[i];
+  }
+  const vwap = totalV > 0 ? totalVP / totalV : price;
+  const vwapDeviation = (price - vwap) / vwap;
+  let vwapScore = 50;
+  if (price < vwap && takerBuyRatio < 0.5) vwapScore = 100;
+  else if (price < vwap * 0.997) vwapScore = 85;
+  else if (Math.abs(vwapDeviation) < 0.007) vwapScore = 70;
+  else if (price > vwap * 1.015) vwapScore = 35;
+  else vwapScore = 50;
+  
+  const tenkan = (Math.max.apply(null, highs5.slice(-9)) + Math.min.apply(null, lows5.slice(-9))) / 2;
+  const kijun = (Math.max.apply(null, highs5.slice(-26)) + Math.min.apply(null, lows5.slice(-26))) / 2;
+  const senkouA = (tenkan + kijun) / 2;
+  const senkouB = (Math.max.apply(null, highs5.slice(-52)) + Math.min.apply(null, lows5.slice(-52))) / 2;
+  const cloudTop = Math.max(senkouA, senkouB);
+  const cloudBottom = Math.min(senkouA, senkouB);
+  let ichimokuScore = 50;
+  if (price < cloudBottom && tenkan < kijun) ichimokuScore = 100;
+  else if (price < cloudBottom) ichimokuScore = 85;
+  else if (price < cloudTop && tenkan < kijun) ichimokuScore = 75;
+  else if (price < cloudTop) ichimokuScore = 55;
+  else ichimokuScore = 30;
+  
+  let smartMoneySignals = 0;
+  if (dumpScore >= 70) smartMoneySignals++;
+  if (largeTradesScore >= 70) smartMoneySignals++;
+  if (takerScore >= 70) smartMoneySignals++;
+  if (obvScore >= 70) smartMoneySignals++;
+  if (orderBookScore >= 70) smartMoneySignals++;
+  if (dryUpScore >= 70) smartMoneySignals++;
+  const smartMoneyScore = smartMoneySignals >= 5 ? 100 : smartMoneySignals >= 4 ? 85 : smartMoneySignals >= 3 ? 70 : smartMoneySignals >= 2 ? 55 : 30;
+  
+  const fibHigh = Math.max.apply(null, highs1h.slice(-50));
+  const fibLow = Math.min.apply(null, lows1h.slice(-50));
+  const fibRange = fibHigh - fibLow;
+  const fibLevels = {
+    '23.6': fibHigh - fibRange * 0.236,
+    '38.2': fibHigh - fibRange * 0.382,
+    '50.0': fibHigh - fibRange * 0.500,
+    '61.8': fibHigh - fibRange * 0.618,
+    '78.6': fibHigh - fibRange * 0.786
+  };
+  let nearFib = null, minDist = Infinity;
+  for (const level in fibLevels) {
+    const dist = Math.abs(price - fibLevels[level]) / price;
+    if (dist < minDist) { minDist = dist; nearFib = level; }
+  }
+  const fibScore = minDist < 0.004 && ['23.6','38.2'].indexOf(nearFib) >= 0 ? 100 :
+                   minDist < 0.007 ? 85 : minDist < 0.012 ? 65 : 40;
+  
+  const recent20High = Math.max.apply(null, highs1.slice(-20));
+  const recent20Low = Math.min.apply(null, lows1.slice(-20));
+  const distToHigh = (recent20High - price) / price;
+  const distToLow = (price - recent20Low) / price;
+  let liquidationScore = 50;
+  if (distToLow < 0.008) liquidationScore = 100;
+  else if (distToLow < 0.015) liquidationScore = 85;
+  else if (distToLow < 0.025) liquidationScore = 70;
+  else if (distToHigh < 0.015) liquidationScore = 35;
+  
+  const last50_5m = closes5.slice(-50);
+  const wave1High = Math.max.apply(null, last50_5m.slice(0, 20));
+  const wave1Low = Math.min.apply(null, last50_5m.slice(15, 35));
+  const wave2High = Math.max.apply(null, last50_5m.slice(30, 50));
+  const wave1Size = (wave1High - wave1Low) / wave1High;
+  const wave2Retrace = (wave2High - wave1Low) / (wave1High - wave1Low);
+  const elliottScore = wave1Size > 0.04 && wave2Retrace > 0.35 && wave2Retrace < 0.75 ? 100 :
+                       wave1Size > 0.025 && wave2Retrace > 0.3 && wave2Retrace < 0.8 ? 85 :
+                       wave2Retrace < 0.9 ? 60 : 35;
+  
+  const rsi1m = calcRSI(closes1, 14);
+  const rsi5m = calcRSI(closes5, 14);
+  const rsi15m = calcRSI(closes15, 14);
+  const rsi1h_v = calcRSI(closes1h, 14);
+  let alignmentScore = 0;
+  if (rsi1m < 60 && rsi1m > 20) alignmentScore += 25;
+  if (rsi5m < 60 && rsi5m > 20) alignmentScore += 25;
+  if (rsi15m < 65 && rsi15m > 25) alignmentScore += 25;
+  if (rsi1h_v < 65 && rsi1h_v > 25) alignmentScore += 25;
+  
+  let fundingScore = 50, fundingRate = 0;
+  if (fundingData && fundingData.lastFundingRate !== undefined) {
+    fundingRate = parseFloat(fundingData.lastFundingRate) * 100;
+    if (fundingRate > 0.05) fundingScore = 100;
+    else if (fundingRate > 0.02) fundingScore = 90;
+    else if (fundingRate > 0) fundingScore = 80;
+    else if (fundingRate > -0.01) fundingScore = 70;
+    else if (fundingRate > -0.03) fundingScore = 55;
+    else if (fundingRate > -0.06) fundingScore = 35;
+    else fundingScore = 20;
+  }
+  
+  let openIntScore = 50, oiValue = 0;
+  if (oiData && oiData.openInterest) {
+    oiValue = parseFloat(oiData.openInterest);
+    const oiPerVol = oiValue / ((vol24h / 1_000_000) || 1);
+    if (oiPerVol > 100) openIntScore = 100;
+    else if (oiPerVol > 50) openIntScore = 85;
+    else if (oiPerVol > 20) openIntScore = 70;
+    else if (oiPerVol > 5) openIntScore = 55;
+    else openIntScore = 40;
+  }
+  
+  let topTraderScore = 50, topTraderRatio = 1;
+  if (Array.isArray(topLS) && topLS.length >= 2) {
+    topTraderRatio = parseFloat(topLS[topLS.length - 1].longShortRatio);
+    const firstTop = parseFloat(topLS[0].longShortRatio);
+    const topTrend = topTraderRatio - firstTop;
+    if (topTraderRatio < 0.7 && topTrend < -0.05) topTraderScore = 100;
+    else if (topTraderRatio < 0.85 && topTrend < 0) topTraderScore = 85;
+    else if (topTraderRatio < 0.95) topTraderScore = 70;
+    else if (topTraderRatio < 1.1) topTraderScore = 55;
+    else if (topTraderRatio > 1.5) topTraderScore = 30;
+    else topTraderScore = 45;
+  }
+  
+  let dumpScore_final = Math.round(
+    dumpScore * 0.10 +
+    orderBookScore * 0.09 +
+    largeTradesScore * 0.08 +
+    takerScore * 0.08 +
+    smartMoneyScore * 0.08 +
+    compressionScore * 0.07 +
+    obvScore * 0.07 +
+    dryUpScore * 0.06 +
+    supportScore * 0.05 +
+    wickScore * 0.05 +
+    silentScore * 0.04 +
+    microScore * 0.04 +
+    spreadScore * 0.03 +
+    timeScore * 0.03 +
+    vwapScore * 0.03 +
+    ichimokuScore * 0.02 +
+    fibScore * 0.02 +
+    liquidationScore * 0.02 +
+    elliottScore * 0.02 +
+    alignmentScore * 0.02 +
+    fundingScore * 0.05 +
+    openIntScore * 0.04 +
+    topTraderScore * 0.04
+  );
+  
+  const baseScore = dumpScore_final;
+  const warnings = [];
+  const bonuses = [];
+  const deductions = [];
+  
+  const backtest = runBacktestDump(k1m);
+  
+  let bonus = 0;
+  if (dumpScore >= 70) {
+    if (compressionScore >= 70 && obvScore >= 70) { bonus += 10; warnings.push('📉 توزيع مثالي'); bonuses.push({label: '📉 توزيع مثالي', value: 10}); }
+    if (orderBookScore >= 80 && largeTradesScore >= 80 && takerScore >= 70) { bonus += 10; warnings.push('🐻 بيع مؤسسي'); bonuses.push({label: '🐻 بيع مؤسسي', value: 10}); }
+    if (smartMoneyScore >= 85) { bonus += 8; warnings.push('💎 Short ذكي'); bonuses.push({label: '💎 Short ذكي', value: 8}); }
+    if (fundingScore >= 85 && openIntScore >= 85) { bonus += 8; warnings.push('💥 Short مثالي'); bonuses.push({label: '💥 Short مثالي', value: 8}); }
+    if (topTraderScore >= 85) { bonus += 5; warnings.push('🐻 المحافظ Short'); bonuses.push({label: '🐻 المحافظ Short', value: 5}); }
+  } else {
+    bonuses.push({label: '🚪 بوابة: بصمة ضعيفة - لا بونص', value: 0});
+  }
+  
+  const allScores = [dumpScore, compressionScore, obvScore, supportScore, spreadScore, 
+                     silentScore, dryUpScore, timeScore, wickScore, microScore,
+                     orderBookScore, largeTradesScore, takerScore, vwapScore, 
+                     ichimokuScore, smartMoneyScore, fibScore, liquidationScore, 
+                     elliottScore, alignmentScore, fundingScore, openIntScore, topTraderScore];
+  const highCount = allScores.filter(function(s) { return s >= 70; }).length;
+  
+  if (dumpScore >= 70) {
+    if (highCount >= 20) { bonus += 20; bonuses.push({label: '🎯 ' + highCount + '/23 مؤشر قوي', value: 20}); }
+    else if (highCount >= 17) { bonus += 12; bonuses.push({label: '🎯 ' + highCount + '/23 مؤشر قوي', value: 12}); }
+    else if (highCount >= 14) { bonus += 6; bonuses.push({label: '🎯 ' + highCount + '/23 مؤشر قوي', value: 6}); }
+  }
+  
+  if (backtest.total >= 3) {
+    const btWinRate = parseFloat(backtest.winRate);
+    if (btWinRate < 20) {
+      const cap = 60;
+      if (baseScore + bonus > cap) deductions.push({label: '🚫 Backtest فاشل', value: cap - (baseScore + bonus)});
+      dumpScore_final = Math.min(cap, baseScore + bonus);
+    } else if (btWinRate < 40) {
+      const cap = 72;
+      if (baseScore + bonus > cap) deductions.push({label: '⚠️ Backtest ضعيف', value: cap - (baseScore + bonus)});
+      dumpScore_final = Math.min(cap, baseScore + bonus);
+    } else if (btWinRate < 55) {
+      const cap = 85;
+      if (baseScore + bonus > cap) deductions.push({label: '📊 Backtest متوسط', value: cap - (baseScore + bonus)});
+      dumpScore_final = Math.min(cap, baseScore + bonus);
+    } else {
+      dumpScore_final = Math.min(100, baseScore + bonus);
+    }
+  } else {
+    dumpScore_final = Math.min(90, baseScore + bonus);
+  }
+  
+  if (change24h > 20) { dumpScore_final += 8; bonuses.push({label: '📈 ارتفعت كثيراً', value: 8}); }
+  else if (change24h > 15) { dumpScore_final += 5; bonuses.push({label: '📈 ارتفعت', value: 5}); }
+  
+  if (change24h < -15) { dumpScore_final -= 15; deductions.push({label: '⚠️ انخفضت مسبقاً', value: -15}); }
+  
+  if (vol24h < 2_000_000) { dumpScore_final -= 15; deductions.push({label: '⚠️ سيولة ضعيفة', value: -15}); }
+  
+  if (dumpScore_final >= 98) {
+    const btWinRate = parseFloat(backtest.winRate);
+    if (baseScore < 90 || highCount < 20 || btWinRate < 55 || dumpCandles < 4) {
+      deductions.push({label: '🔒 سقف 95%', value: -3});
+      dumpScore_final = 95;
+    }
+  }
+  
+  dumpScore_final = Math.max(0, Math.min(100, dumpScore_final));
+  
+  const confidence = Math.round((highCount / 23) * 100);
+  
+  let level, levelClass, timing;
+  const btWinRateFinal = parseFloat(backtest.winRate);
+  if (dumpScore_final >= 92 && confidence >= 87 && dumpCandles >= 4 && btWinRateFinal >= 55) { 
+    level = '💎 نخبة — انهيار مؤكد'; levelClass = 'elite-dump'; timing = '⚡ ادخل Short'; 
+  }
+  else if (dumpScore_final >= 85 && dumpCandles >= 3) { 
+    level = '🚀 انهيار خلال 5 دقائق'; levelClass = 'strong-dump'; timing = '⚡ ادخل Short'; 
+  }
+  else if (dumpScore_final >= 72) { level = '🔥 انهيار قريب'; levelClass = 'strong-dump'; timing = '⏰ استعد'; }
+  else if (dumpScore_final >= 58) { level = '⚡ توزيع نشط'; levelClass = 'medium'; timing = '👀 راقب'; }
+  else { level = '📡 توزيع مبكر'; levelClass = 'weak'; timing = '⏳ في المراقبة'; }
+  
+  return {
+    symbol: symbol, name: symbol.replace('USDT',''),
+    price: price, change: change24h, volume: vol24h,
+    explodeScore: dumpScore_final, baseScore: baseScore, confidence: confidence,
+    level: level, levelClass: levelClass, timing: timing, warnings: warnings,
+    bonuses: bonuses, deductions: deductions, gatesApplied: [],
+    whaleCandles: dumpCandles, obvChange: obvChange, bidAskRatio: bidAskRatio,
+    largeBuys: largeSells, largeSells: largeBuys, takerBuyRatio: takerBuyRatio,
+    fundingRate: fundingRate, topTraderRatio: topTraderRatio,
+    backtest: backtest,
+    direction: 'SHORT',
+    market: 'futures',
+    timing_type: 'normal',
+    totalIndicators: 23,
+    entry: price, target1: price * 0.97, target2: price * 0.93, target3: price * 0.85, stop: price * 1.018,
+    signals: {
+      whale:       { score: Math.round(dumpScore), label: dumpCandles + ' شمعة' },
+      orderBook:   { score: Math.round(orderBookScore), label: 'B/A ' + bidAskRatio.toFixed(2) },
+      largeTrades: { score: Math.round(largeTradesScore), label: largeSells + ' بيع' },
+      taker:       { score: Math.round(takerScore), label: (takerBuyRatio*100).toFixed(0) + '%' },
+      obv:         { score: Math.round(obvScore), label: (obvChange*100).toFixed(0) + '%' },
+      smartMoney:  { score: Math.round(smartMoneyScore), label: smartMoneySignals + '/6' },
+      compression: { score: Math.round(compressionScore), label: '—' },
+      funding:     { score: Math.round(fundingScore), label: fundingRate.toFixed(3) + '%' },
+      openInt:     { score: Math.round(openIntScore), label: oiValue > 1000 ? (oiValue/1000).toFixed(0) + 'K' : oiValue.toFixed(0) },
+      topTrader:   { score: Math.round(topTraderScore), label: topTraderRatio.toFixed(2) }
+    }
+  };
+}
+
+/* ============ Pump Detector ============ */
+async function analyzePump(t) {
+  const symbol = t.symbol;
+  const change24h = parseFloat(t.priceChangePercent);
+  
+  /* فلتر: نتجنب العملات اللي ارتفعت كثير */
+  if (change24h > 50) return null;
+  if (change24h < -20) return null;
+  
+  const isFutures = scanMarket === 'futures';
+  const base = isFutures ? FAPI : SAPI;
+  const klinesPath = isFutures ? '/fapi/v1/klines?' : '/api/v3/klines?';
+  const tradesPath = isFutures ? '/fapi/v1/aggTrades?' : '/api/v3/aggTrades?';
+  const depthPath = isFutures ? '/fapi/v1/depth?' : '/api/v3/depth?';
+  
+  const [k1m, k5m, trades, orderBook] = await Promise.all([
+    safeFetch(base + klinesPath + 'symbol=' + symbol + '&interval=1m&limit=60'),
+    safeFetch(base + klinesPath + 'symbol=' + symbol + '&interval=5m&limit=30'),
+    safeFetch(base + tradesPath + 'symbol=' + symbol + '&limit=500'),
+    safeFetch(base + depthPath + 'symbol=' + symbol + '&limit=50')
+  ]);
+  
+  if (!Array.isArray(k1m) || k1m.length < 15) return null;
+  
+  const closes1 = k1m.map(function(k) { return parseFloat(k[4]); });
+  const highs1 = k1m.map(function(k) { return parseFloat(k[2]); });
+  const lows1 = k1m.map(function(k) { return parseFloat(k[3]); });
+  const opens1 = k1m.map(function(k) { return parseFloat(k[1]); });
+  const vols1 = k1m.map(function(k) { return parseFloat(k[5]); });
+  
+  const price = closes1[closes1.length - 1];
+  const vol24h = parseFloat(t.quoteVolume);
+  
+  /* 1. Volume Spike (5x) */
+  const avgVol10 = vols1.slice(-20, -5).reduce(function(a,b) { return a+b; }, 0) / 15;
+  const lastVol = vols1.slice(-3).reduce(function(a,b) { return a+b; }, 0) / 3;
+  const volRatio = lastVol / (avgVol10 || 1);
+  let volScore;
+  if (volRatio > 8) volScore = 100;
+  else if (volRatio > 5) volScore = 90;
+  else if (volRatio > 3) volScore = 75;
+  else if (volRatio > 2) volScore = 60;
+  else if (volRatio > 1.5) volScore = 45;
+  else volScore = 20;
+  
+  /* 2. Price Move (سرعة الحركة) */
+  const priceChange1m = ((price - closes1[closes1.length - 2]) / closes1[closes1.length - 2]) * 100;
+  const priceChange5m = ((price - closes1[closes1.length - 6]) / closes1[closes1.length - 6]) * 100;
+  const absMove = Math.max(Math.abs(priceChange1m), Math.abs(priceChange5m));
+  let moveScore;
+  if (absMove > 3) moveScore = 100;
+  else if (absMove > 2) moveScore = 90;
+  else if (absMove > 1.5) moveScore = 80;
+  else if (absMove > 1) moveScore = 65;
+  else if (absMove > 0.5) moveScore = 50;
+  else moveScore = 25;
+  
+  /* 3. Taker Buy Ratio */
+  const recentBuy = k1m.slice(-5).reduce(function(sum, k) { return sum + parseFloat(k[9]); }, 0);
+  const recentVol = k1m.slice(-5).reduce(function(sum, k) { return sum + parseFloat(k[5]); }, 0);
+  const buyRatio = recentVol > 0 ? recentBuy / recentVol : 0.5;
+  let takerScore;
+  if (buyRatio > 0.7) takerScore = 100;
+  else if (buyRatio > 0.6) takerScore = 85;
+  else if (buyRatio > 0.55) takerScore = 70;
+  else if (buyRatio > 0.5) takerScore = 55;
+  else if (buyRatio > 0.45) takerScore = 40;
+  else takerScore = 25;
+  
+  /* 4. Large Trades */
+  let largeBuys = 0, largeSells = 0;
+  if (Array.isArray(trades) && trades.length > 10) {
+    const values = trades.map(function(tr) { return parseFloat(tr.p) * parseFloat(tr.q); });
+    const avgV = values.reduce(function(a,b) { return a+b; }, 0) / values.length;
+    const threshold = avgV * 10;
+    trades.forEach(function(tr) {
+      const v = parseFloat(tr.p) * parseFloat(tr.q);
+      if (v > threshold) { if (tr.m === false) largeBuys++; else largeSells++; }
+    });
+  }
+  const totalLarge = largeBuys + largeSells;
+  let largeScore = 50;
+  if (totalLarge > 0) {
+    const buyR = largeBuys / totalLarge;
+    if (buyR > 0.7 && largeBuys >= 5) largeScore = 100;
+    else if (buyR > 0.6 && largeBuys >= 3) largeScore = 85;
+    else if (buyR > 0.5) largeScore = 65;
+    else largeScore = 30;
+  }
+  
+  /* 5. B/A Ratio */
+  let bidAskRatio = 1;
+  if (orderBook && orderBook.bids && orderBook.asks) {
+    const bidVol = orderBook.bids.reduce(function(sum, b) { return sum + parseFloat(b[0]) * parseFloat(b[1]); }, 0);
+    const askVol = orderBook.asks.reduce(function(sum, a) { return sum + parseFloat(a[0]) * parseFloat(a[1]); }, 0);
+    bidAskRatio = bidVol / (askVol || 1);
+  }
+  let baScore;
+  if (bidAskRatio > 2) baScore = 100;
+  else if (bidAskRatio > 1.5) baScore = 85;
+  else if (bidAskRatio > 1.2) baScore = 70;
+  else if (bidAskRatio > 1) baScore = 55;
+  else baScore = 30;
+  
+  /* حساب النتيجة */
+  const pumpScore = Math.round(
+    volScore * 0.30 +
+    moveScore * 0.25 +
+    takerScore * 0.20 +
+    largeScore * 0.15 +
+    baScore * 0.10
+  );
+  
+  if (pumpScore < 60) return null;
+  
+  /* التصنيف */
+  let level, levelClass, timing;
+  if (pumpScore >= 85 && volRatio > 5) {
+    level = '🚀 PUMP — انفجار مفاجئ!'; levelClass = 'pump-elite'; timing = '🔥 ادخل فوراً — دقائق!';
+  } else if (pumpScore >= 75) {
+    level = '⚡ Pump محتمل'; levelClass = 'pump-strong'; timing = '⚠️ راقب — قد ينفجر';
+  } else {
+    level = '📡 نشاط غريب'; levelClass = 'medium'; timing = '👀 مراقبة';
+  }
+  
+  return {
+    symbol: symbol, name: symbol.replace('USDT',''),
+    price: price, change: change24h, volume: vol24h,
+    explodeScore: pumpScore, baseScore: pumpScore, confidence: Math.round(pumpScore * 0.9),
+    level: level, levelClass: levelClass, timing: timing,
+    warnings: pumpScore >= 85 ? ['🚀 PUMP مفاجئ'] : [],
+    bonuses: [], deductions: [], gatesApplied: [],
+    whaleCandles: 0, obvChange: 0, bidAskRatio: bidAskRatio,
+    largeBuys: largeBuys, largeSells: largeSells, takerBuyRatio: buyRatio,
+    volRatio: volRatio, priceMove: absMove,
+    backtest: { wins: 0, losses: 0, total: 0, winRate: '0', avgReturn: '0' },
+    direction: 'PUMP',
+    market: scanMarket,
+    timing_type: 'pump',
+    totalIndicators: 5,
+    entry: price, target1: price * 1.05, target2: price * 1.10, target3: price * 1.20, stop: price * 0.975,
+    signals: {
+      whale:       { score: Math.round(volScore), label: '×' + volRatio.toFixed(1) + ' حجم' },
+      orderBook:   { score: Math.round(baScore), label: 'B/A ' + bidAskRatio.toFixed(2) },
+      largeTrades: { score: Math.round(largeScore), label: largeBuys + ' كبير' },
+      taker:       { score: Math.round(takerScore), label: (buyRatio*100).toFixed(0) + '%' },
+      obv:         { score: Math.round(moveScore), label: absMove.toFixed(2) + '%' },
+      smartMoney:  { score: 50, label: '—' },
+      compression: { score: 50, label: '—' },
+      funding:     { score: 50, label: '—' },
+      openInt:     { score: 50, label: '—' },
+      topTrader:   { score: 50, label: '—' }
+    }
+  };
+}
+
+/* ============ Backtest ============ */
+function runBacktestAccumulation(klines) {
+  const closes = klines.map(function(k) { return parseFloat(k[4]); });
+  const highs  = klines.map(function(k) { return parseFloat(k[2]); });
+  const lows   = klines.map(function(k) { return parseFloat(k[3]); });
+  const vols   = klines.map(function(k) { return parseFloat(k[5]); });
+  let wins = 0, losses = 0, totalReturn = 0;
+  const maxTest = Math.min(60, closes.length - 30);
+  for (let i = 30; i < 30 + maxTest; i++) {
+    const last10High = Math.max.apply(null, highs.slice(i-10, i));
+    const last10Low = Math.min.apply(null, lows.slice(i-10, i));
+    const compression = (last10High - last10Low) / last10Low;
+    const avgVol10 = vols.slice(i-10, i).reduce(function(a,b) { return a+b; }, 0) / 10;
+    const prevAvgVol = vols.slice(i-20, i-10).reduce(function(a,b) { return a+b; }, 0) / 10;
+    const dryUp = avgVol10 / (prevAvgVol || 1);
+    if (compression < 0.015 && dryUp < 0.7) {
+      const entry = closes[i];
+      let maxHigh = entry;
+      for (let j = i + 1; j < Math.min(i + 11, closes.length); j++) maxHigh = Math.max(maxHigh, highs[j]);
+      const ret = (maxHigh - entry) / entry * 100;
+      if (ret >= 2.5) { wins++; totalReturn += ret; }
+      else if (ret < 0.5) { losses++; totalReturn -= 1; }
+    }
+  }
+  const total = wins + losses;
+  const winRate = total > 0 ? (wins / total * 100) : 0;
+  const avgReturn = total > 0 ? (totalReturn / total) : 0;
+  return { wins: wins, losses: losses, total: total, winRate: winRate.toFixed(0), avgReturn: avgReturn.toFixed(2) };
+}
+
+function runBacktestDump(klines) {
+  const closes = klines.map(function(k) { return parseFloat(k[4]); });
+  const highs  = klines.map(function(k) { return parseFloat(k[2]); });
+  const lows   = klines.map(function(k) { return parseFloat(k[3]); });
+  const vols   = klines.map(function(k) { return parseFloat(k[5]); });
+  let wins = 0, losses = 0, totalReturn = 0;
+  const maxTest = Math.min(60, closes.length - 30);
+  for (let i = 30; i < 30 + maxTest; i++) {
+    const last10High = Math.max.apply(null, highs.slice(i-10, i));
+    const last10Low = Math.min.apply(null, lows.slice(i-10, i));
+    const compression = (last10High - last10Low) / last10Low;
+    const avgVol10 = vols.slice(i-10, i).reduce(function(a,b) { return a+b; }, 0) / 10;
+    const prevAvgVol = vols.slice(i-20, i-10).reduce(function(a,b) { return a+b; }, 0) / 10;
+    const dryUp = avgVol10 / (prevAvgVol || 1);
+    if (compression < 0.015 && dryUp < 0.7) {
+      const entry = closes[i];
+      let minLow = entry;
+      for (let j = i + 1; j < Math.min(i + 11, closes.length); j++) minLow = Math.min(minLow, lows[j]);
+      const ret = (entry - minLow) / entry * 100;
+      if (ret >= 2.5) { wins++; totalReturn += ret; }
+      else if (ret < 0.5) { losses++; totalReturn -= 1; }
+    }
+  }
+  const total = wins + losses;
+  const winRate = total > 0 ? (wins / total * 100) : 0;
+  const avgReturn = total > 0 ? (totalReturn / total) : 0;
+  return { wins: wins, losses: losses, total: total, winRate: winRate.toFixed(0), avgReturn: avgReturn.toFixed(2) };
+}
+
+/* ============ Cooldown ============ */
+function checkCooldown() {
+  const now = Date.now();
+  if (now < cooldownUntil) {
+    const remaining = Math.ceil((cooldownUntil - now) / 1000);
+    const mins = Math.floor(remaining / 60);
+    const secs = remaining % 60;
+    showStatus('⏸️ استراحة: ' + mins + ':' + String(secs).padStart(2,'0'), 'cooldown');
+    return false;
+  }
+  return true;
+}
+
+function setCooldown(seconds) {
+  cooldownUntil = Date.now() + (seconds * 1000);
+  if (cooldownTimer) clearInterval(cooldownTimer);
+  cooldownTimer = setInterval(function() {
+    const now = Date.now();
+    if (now >= cooldownUntil) {
+      clearInterval(cooldownTimer);
+      cooldownTimer = null;
+      document.getElementById('cooldownStatus').textContent = '';
+      return;
+    }
+    const remaining = Math.ceil((cooldownUntil - now) / 1000);
+    const mins = Math.floor(remaining / 60);
+    const secs = remaining % 60;
+    document.getElementById('cooldownStatus').textContent = '⏸️ استراحة: ' + mins + ':' + String(secs).padStart(2,'0');
+  }, 1000);
+}
+
+/* ============ Progress ============ */
+function updateProgress(current, total, found) {
+  const panel = document.getElementById('progressPanel');
+  if (!panel) return;
+  panel.style.display = 'block';
+  const pct = Math.round((current / total) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressFill').textContent = pct + '%';
+  document.getElementById('progressCurrent').textContent = current + ' / ' + total;
+  document.getElementById('progressFound').textContent = '✅ ' + found + ' إشارة';
+}
+
+function hideProgress() {
+  const panel = document.getElementById('progressPanel');
+  if (panel) panel.style.display = 'none';
+}
+
+function stopScan() {
+  if (!isScanning) return;
+  shouldStopScan = true;
+  showStatus('⏹️ جاري إيقاف الفحص...', 'stopped');
+}
+
+function showAdvice() {
+  document.getElementById('adviceModal').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeAdvice() {
+  document.getElementById('adviceModal').classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+/* ============ Scanner ============ */
+async function runExplodeScanner() {
+  if (isScanning) {
+    showStatus('⏸️ الفحص قيد التنفيذ...', 'loading');
+    return;
+  }
+  
+  if (!checkCooldown()) return;
+  
+  const limit = parseInt(document.getElementById('explodeLimit').value);
+  const minScore = parseInt(document.getElementById('explodeMinScore').value);
+  
+  const apiBase = scanMarket === 'futures' ? FAPI : SAPI;
+  const tickerPath = scanMarket === 'futures' ? '/fapi/v1/ticker/24hr' : '/api/v3/ticker/24hr';
+  
+  const marketText = scanMarket === 'futures' ? 'Futures' : 'Spot';
+  const modeText = scanMode === 'buy' ? '🟢 شراء' : scanMode === 'early' ? '🎯 قبل الانفجار' : scanMode === 'sell' ? '🔴 بيع' : '🚀 Pump';
+  
+  showStatus('⚡ جلب بيانات ' + marketText + ' — ' + modeText, 'explode');
+  document.getElementById('results').innerHTML = '';
+  
+  isScanning = true;
+  shouldStopScan = false;
+  document.getElementById('scanBtn').disabled = true;
+  document.getElementById('stopBtn').style.display = 'block';
+  
+  Object.values(activeTimers).forEach(function(t) {
+    if (t.interval) clearInterval(t.interval);
+    if (t.verifyInterval) clearInterval(t.verifyInterval);
+  });
+  activeTimers = {};
+  
+  try {
+    const res = await fetch(apiBase + tickerPath);
+    if (res.status === 418 || res.status === 429) {
+      setCooldown(180);
+      throw new Error('🚫 Binance حظر مؤقت');
+    }
+    if (!res.ok) throw new Error('API Error: ' + res.status);
+    const data = await res.json();
+    
+    if (!Array.isArray(data)) throw new Error('بيانات غير صحيحة');
+    
+    let candidates = data
+      .filter(function(t) { return t.symbol && t.symbol.endsWith('USDT'); })
+      .filter(function(t) { return parseFloat(t.quoteVolume) > 3_000_000; })
+      .filter(function(t) { return !t.symbol.includes('_'); });
+    
+    if (scanMarket === 'spot') {
+      candidates = candidates
+        .filter(function(t) { return !t.symbol.includes('UP') && !t.symbol.includes('DOWN'); })
+        .filter(function(t) { return !t.symbol.includes('BULL') && !t.symbol.includes('BEAR'); })
+        .filter(function(t) { return ['USDCUSDT','FDUSDUSDT','TUSDUSDT','DAIUSDT','EURUSDT','GBPUSDT'].indexOf(t.symbol) < 0; });
+    }
+    
+    if (scanMode === 'early') {
+      candidates = candidates
+        .filter(function(t) { 
+          const change = parseFloat(t.priceChangePercent);
+          return change <= 2.5 && change >= -5;
+        })
+        .sort(function(a, b) { 
+          return Math.abs(parseFloat(a.priceChangePercent)) - Math.abs(parseFloat(b.priceChangePercent)); 
+        })
+        .slice(0, limit);
+    } else if (scanMode === 'pump') {
+      candidates = candidates
+        .filter(function(t) { 
+          const change = parseFloat(t.priceChangePercent);
+          return Math.abs(change) < 30;
+        })
+        .sort(function(a, b) { return parseFloat(b.quoteVolume) - parseFloat(a.quoteVolume); })
+        .slice(0, Math.min(limit, 100));
+    } else {
+      candidates = candidates
+        .filter(function(t) { return Math.abs(parseFloat(t.priceChangePercent)) < 25; })
+        .sort(function(a, b) { return parseFloat(b.quoteVolume) - parseFloat(a.quoteVolume); })
+        .slice(0, limit);
+    }
+    
+    if (candidates.length === 0) {
+      showStatus('⚠️ لا يوجد مرشحين', 'error');
+      isScanning = false;
+      document.getElementById('scanBtn').disabled = false;
+      document.getElementById('stopBtn').style.display = 'none';
+      return;
+    }
+    
+    showStatus('⚡ فحص ' + candidates.length + ' عملة ' + marketText + '...', 'explode');
+    updateProgress(0, candidates.length, 0);
+    
+    const results = [];
+    const batchSize = scanMode === 'pump' ? 3 : 2;
+    let processed = 0;
+    
+    for (let i = 0; i < candidates.length; i += batchSize) {
+      if (shouldStopScan) {
+        showStatus('⏹️ توقف — ' + results.length + ' إشارة', 'stopped');
+        break;
+      }
+      
+      if (i > 0 && i % 10 === 0) {
+        showStatus('⏸️ استراحة 4 ثوان...', 'cooldown');
+        await new Promise(function(res) { setTimeout(res, 4000); });
+        if (shouldStopScan) break;
+      }
+      
+      const batch = candidates.slice(i, i + batchSize);
+      const batchResults = await Promise.all(batch.map(function(t) {
+        let fn;
+        if (scanMode === 'pump') fn = analyzePump;
+        else if (scanMode === 'sell') fn = analyzeDumpDeep;
+        else fn = analyzeExplosionDeep;
+        
+        return fn(t).catch(function(err) {
+          if (err.message === 'RATE_LIMIT') throw err;
+          return null;
+        });
+      }));
+      
+      batchResults.forEach(function(r) { if (r && r.explodeScore >= minScore) results.push(r); });
+      
+      processed = Math.min(i + batchSize, candidates.length);
+      updateProgress(processed, candidates.length, results.length);
+      
+      await new Promise(function(res) { setTimeout(res, scanMode === 'pump' ? 400 : 800); });
+    }
+    
+    results.sort(function(a, b) { return b.explodeScore - a.explodeScore; });
+    currentExplode = results;
+    
+    hideProgress();
+    
+    if (results.length === 0) { 
+      showStatus('🔍 لا توجد إشارات — جرب حساسية أقل', 'success'); 
+      isScanning = false;
+      document.getElementById('scanBtn').disabled = false;
+      document.getElementById('stopBtn').style.display = 'none';
+      return; 
+    }
+    
+    showStatus('✅ ' + results.length + ' إشارة من ' + processed + '!', 'explode');
+    let html = '';
+    results.forEach(function(r, i) {
+      html += renderExplodeToken(r, i + 1);
+      history.unshift({ 
+        symbol: r.symbol, 
+        price: r.price, 
+        change: r.change, 
+        score: r.explodeScore, 
+        recommendation: r.direction === 'SHORT' ? '🔴 Short' : (r.timing_type === 'pump' ? '🚀 Pump' : (r.timing_type === 'early' ? '🎯 قبل' : '🟢 Long')), 
+        date: new Date().toISOString(), 
+        direction: r.direction,
+        timing_type: r.timing_type,
+        market: r.market
+      });
+    });
+    history = history.slice(0, 100);
+    localStorage.setItem('analysisHistory', JSON.stringify(history));
+    document.getElementById('results').innerHTML = html;
+    setTimeout(function() { startAllCountdowns(); }, 100);
+    
+    /* إشعارات */
+    const eliteSignals = results.filter(function(r) { 
+      return r.explodeScore >= 85 && r.confidence >= 80;
+    });
+    
+    if (scanMode === 'pump' && results.some(function(r) { return r.explodeScore >= 85; })) {
+      playPumpAlert();
+      const first = results.find(function(r) { return r.explodeScore >= 85; });
+      if (first) {
+        showBrowserNotification('🚀 PUMP!', first.symbol + ' - ' + first.explodeScore + '%');
+        if (pumpTelegramEnabled) {
+          const key = first.symbol + '_PUMP_' + Math.floor(Date.now() / 30000);
+          if (!sentSignalsCache[key]) {
+            sentSignalsCache[key] = true;
+            sendEliteToTelegram(first);
+          }
+        }
+      }
+    } else if (eliteSignals.length > 0) {
+      playEliteAlert();
+      const first = eliteSignals[0];
+      showBrowserNotification(
+        first.direction === 'SHORT' ? '🔴 Short نخبة' : (first.timing_type === 'early' ? '🎯 قبل الانفجار' : '💎 Long نخبة'),
+        first.symbol + ' - ' + first.explodeScore + '%'
+      );
+      
+      if (autoTelegramEnabled) {
+        eliteSignals.forEach(function(sig) {
+          const key = sig.symbol + '_' + sig.direction + '_' + (sig.timing_type || '') + '_' + Math.floor(Date.now() / 60000);
+          if (!sentSignalsCache[key]) {
+            sentSignalsCache[key] = true;
+            sendEliteToTelegram(sig);
+          }
+        });
+      }
+    } else if (results.some(function(r) { return r.explodeScore >= 80; })) {
+      playWarningSound();
+    }
+    
+    setCooldown(scanMode === 'pump' ? 30 : 60);
+    
+  } catch (err) { 
+    hideProgress();
+    if (err.message === 'RATE_LIMIT') {
+      showStatus('🚫 حظر مؤقت', 'error');
+    } else {
+      showStatus('❌ خطأ: ' + err.message, 'error'); 
+    }
+  } finally {
+    isScanning = false;
+    shouldStopScan = false;
+    document.getElementById('scanBtn').disabled = false;
+    document.getElementById('stopBtn').style.display = 'none';
+  }
+}
+
+function playWarningSound() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.frequency.value = 800;
+    osc.type = 'square';
+    gain.gain.setValueAtTime(0.3, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.2);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + 0.2);
+  } catch(e) {}
+}
+
+/* ============ Telegram ============ */
+async function sendEliteToTelegram(sig) {
+  const token = document.getElementById('tgBotToken').value.trim();
+  const chatId = document.getElementById('tgChatId').value.trim();
+  if (!token || !chatId) return;
+  
+  function fmt(n) { return n.toLocaleString('en-US', { maximumFractionDigits: 6 }); }
+  const s = sig.change >= 0 ? '+' : '';
+  const isShort = sig.direction === 'SHORT';
+  const isPump = sig.timing_type === 'pump';
+  const isEarly = sig.timing_type === 'early';
+  
+  let emoji, dirText;
+  if (isPump) { emoji = '🚀'; dirText = 'PUMP'; }
+  else if (isShort) { emoji = '🔴'; dirText = 'انهيار (Short)'; }
+  else if (isEarly) { emoji = '🎯'; dirText = 'قبل الانفجار'; }
+  else { emoji = '💎'; dirText = 'انفجار (Long)'; }
+  
+  const market = sig.market === 'futures' ? 'FUTURES' : 'SPOT';
+  
+  let msg = emoji + ' <b>' + dirText + ' — ' + market + '</b>\n' +
+    '━━━━━━━━━━━━━━━━━━━\n\n' +
+    '<b>' + sig.name + '</b> <code>' + sig.symbol + '</code>\n' +
+    '🎯 الاحتمال: <b>' + sig.explodeScore + '%</b>\n' +
+    '🎯 الثقة: <b>' + sig.confidence + '%</b>\n';
+  
+  if (sig.backtest && sig.backtest.total > 0) {
+    msg += '📊 Backtest: <b>' + sig.backtest.winRate + '%</b>\n';
+  }
+  
+  if (sig.whaleCandles > 0) {
+    msg += '🐋 بصمة: <b>' + sig.whaleCandles + ' شمعة</b>\n';
+  }
+  
+  if (sig.volRatio) {
+    msg += '📈 حجم: <b>×' + sig.volRatio.toFixed(1) + '</b>\n';
+  }
+  
+  msg += '\n💰 السعر: <b>$' + fmt(sig.price) + '</b> (' + s + sig.change.toFixed(2) + '%)\n' +
+    '📍 الدخول: <b>$' + fmt(sig.entry) + '</b>\n' +
+    '🎯 الهدف: <b>$' + fmt(sig.target1) + '</b>\n' +
+    '🛑 الوقف: <b>$' + fmt(sig.stop) + '</b>\n\n' +
+    '━━━━━━━━━━━━━━━━━━━\n' +
+    '🤖 كاشف الانفجار V13';
+  
+  try {
+    await fetch('https://api.telegram.org/bot' + token + '/sendMessage', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chat_id: chatId,
+        text: msg,
+        parse_mode: 'HTML',
+        disable_web_page_preview: true
+      })
+    });
+  } catch (e) {}
+}
+
+function toggleAutoTelegram() {
+  const btn = document.getElementById('tgAutoBtn');
+  const indicator = document.getElementById('tgAutoIndicator');
+  const token = document.getElementById('tgBotToken').value.trim();
+  const chatId = document.getElementById('tgChatId').value.trim();
+  
+  if (!autoTelegramEnabled) {
+    if (!token || !chatId) {
+      showTgStatus('⚠️ أدخل Token و Chat ID', 'err');
+      return;
+    }
+    localStorage.setItem('tgBotToken', token);
+    localStorage.setItem('tgChatId', chatId);
+    autoTelegramEnabled = true;
+    btn.textContent = '🔕 إيقاف الإرسال التلقائي';
+    btn.classList.add('on');
+    indicator.textContent = '🟢 يرسل';
+    indicator.style.color = '#3fb950';
+    showTgStatus('✅ الإرسال التلقائي يعمل', 'auto');
+  } else {
+    autoTelegramEnabled = false;
+    btn.textContent = '🔔 تشغيل الإرسال التلقائي';
+    btn.classList.remove('on');
+    indicator.textContent = '⚪ متوقف';
+    indicator.style.color = '#8b949e';
+    showTgStatus('⏸️ تم الإيقاف', 'wait');
+  }
+}
+
+function togglePumpTelegram() {
+  const btn = document.getElementById('tgPumpBtn');
+  const token = document.getElementById('tgBotToken').value.trim();
+  const chatId = document.getElementById('tgChatId').value.trim();
+  
+  if (!pumpTelegramEnabled) {
+    if (!token || !chatId) {
+      showTgStatus('⚠️ أدخل Token و Chat ID', 'err');
+      return;
+    }
+    pumpTelegramEnabled = true;
+    btn.textContent = '🔕 إيقاف Pump تلقائي';
+    btn.classList.add('on');
+    showTgStatus('🚀 Pump تلقائي يعمل', 'auto');
+  } else {
+    pumpTelegramEnabled = false;
+    btn.textContent = '🚀 إرسال Pump تلقائي';
+    btn.classList.remove('on');
+    showTgStatus('⏸️ تم الإيقاف', 'wait');
+  }
+}
+
+/* ============ Render Token ============ */
+function renderExplodeToken(r, rank) {
+  function fmt(n) { return n.toLocaleString('en-US', { maximumFractionDigits: 8 }); }
+  const isShort = r.direction === 'SHORT';
+  const isEarly = r.timing_type === 'early';
+  const isPump = r.timing_type === 'pump';
+  const isFutures = r.market === 'futures';
+  const changeClass = r.change >= 0 ? 'up' : 'down';
+  const sign = r.change >= 0 ? '+' : '';
+  
+  let color;
+  if (isPump) color = r.explodeScore >= 85 ? '#f85149' : '#f0b90b';
+  else if (isEarly) color = r.explodeScore >= 85 ? '#f0b90b' : '#3fb950';
+  else if (isShort) color = r.explodeScore >= 92 ? '#f85149' : '#a371f7';
+  else color = r.explodeScore >= 92 ? '#3fb950' : r.explodeScore >= 85 ? '#f85149' : r.explodeScore >= 72 ? '#a371f7' : '#58a6ff';
+  
+  const sig = r.signals;
+  function barColor(s) { return s >= 70 ? '#3fb950' : s >= 45 ? '#f0b90b' : '#f85149'; }
+  
+  let confClass = r.confidence >= 85 ? 'high' : r.confidence >= 65 ? 'mid' : 'low';
+  let confBadge = '<span class="confidence-badge ' + confClass + '">🎯 ' + r.confidence + '%</span>';
+  
+  let btBadge = '';
+  if (r.backtest && r.backtest.total > 0) {
+    const btWinRate = parseFloat(r.backtest.winRate);
+    const btClass = btWinRate >= 55 ? 'good' : btWinRate >= 40 ? 'mid' : 'bad';
+    btBadge = '<span class="backtest-badge ' + btClass + '">📊 ' + btWinRate + '%</span>';
+  }
+  
+  let timingBadge = '';
+  if (!isPump) {
+    if (r.change <= 2.5 && r.change >= -2) timingBadge = '<span class="early-badge-style before">🎯 قبل</span>';
+    else if (r.change > 2.5 && r.change <= 7) timingBadge = '<span class="early-badge-style started">🟡 بداية</span>';
+    else if (r.change > 7 && r.change <= 15) timingBadge = '<span class="early-badge-style late">🟠 متوسط</span>';
+    else if (r.change > 15) timingBadge = '<span class="early-badge-style late">🔴 متأخر</span>';
+  }
+  
+  let dirBadge = '';
+  if (isPump) dirBadge = '<span style="background:linear-gradient(135deg,#f85149,#f0b90b); color:white; font-size:11px; padding:4px 10px; border-radius:6px; font-weight:bold; margin-right:4px; animation:pumpPulse 1s infinite;">🚀 PUMP</span>';
+  else if (isShort) dirBadge = '<span style="background:#f85149; color:white; font-size:10px; padding:3px 8px; border-radius:6px; font-weight:bold; margin-right:4px;">🔴 SHORT</span>';
+  else if (isEarly) dirBadge = '<span style="background:linear-gradient(135deg,#3fb950,#a371f7); color:white; font-size:11px; padding:4px 10px; border-radius:6px; font-weight:bold; margin-right:4px;">🎯 قبل الانفجار</span>';
+  else dirBadge = '<span style="background:#3fb950; color:white; font-size:10px; padding:3px 8px; border-radius:6px; font-weight:bold; margin-right:4px;">🟢 LONG</span>';
+  
+  dirBadge += '<span style="background:' + (isFutures ? 'linear-gradient(135deg,#f0b90b,#f85149)' : 'linear-gradient(135deg,#3fb950,#58a6ff)') + '; color:white; font-size:9px; padding:3px 8px; border-radius:6px; font-weight:bold; margin-right:4px;">' + (isFutures ? 'FUTURES' : 'SPOT') + '</span>';
+  
+  /* Signals rendering */
+  function sigRow(icon, label, data) {
+    if (!data) return '';
+    return '<div class="signal-row">' +
+      '<span class="signal-label"><span class="icon">' + icon + '</span>' + label + '</span>' +
+      '<span style="display:flex; align-items:center; gap:6px;">' +
+        '<span class="signal-value ' + (data.score >= 70 ? 'on' : data.score >= 45 ? '' : 'off') + '">' + data.label + '</span>' +
+        '<span class="signal-bar"><span class="signal-bar-fill" style="width:' + data.score + '%; background:' + barColor(data.score) + ';"></span></span>' +
+      '</span>' +
+    '</div>';
+  }
+  
+  let warningsHtml = '';
+  if (r.warnings && r.warnings.length > 0) {
+    warningsHtml = '<div style="margin-top:6px;">' + r.warnings.map(function(w) {
+      const isBonus = w.startsWith('🌟') || w.startsWith('🐋') || w.startsWith('💎') || w.startsWith('💥') || w.startsWith('🐳');
+      const isEarlyTag = w.startsWith('🎯');
+      const isPumpTag = w.startsWith('🚀');
+      let cls = 'warning-tag';
+      if (isBonus) cls = 'bonus-tag';
+      if (isEarlyTag) cls = 'early-tag';
+      if (isPumpTag) cls = 'pump-tag';
+      return '<span class="' + cls + '">' + w + '</span>';
+    }).join('') + '</div>';
+  }
+  
+  let gatesHtml = '';
+  if (r.gatesApplied && r.gatesApplied.length > 0) {
+    gatesHtml = '<div class="gate-alert">🚪 ' + r.gatesApplied.join(' | ') + '</div>';
+  }
+  
+  let backtestAlert = '';
+  if (r.backtest && r.backtest.total >= 3 && parseFloat(r.backtest.winRate) < 40) {
+    backtestAlert = '<div class="backtest-alert">🚫 Backtest فاشل — لا تدخل!</div>';
+  }
+  
+  let breakdownHtml = '';
+  if ((r.bonuses && r.bonuses.length > 0) || (r.deductions && r.deductions.length > 0)) {
+    breakdownHtml = '<div class="score-breakdown">' +
+      '<div class="score-breakdown-title">📊 تفصيل النقاط (الأساس: ' + r.baseScore + '%)</div>';
+    if (r.bonuses) r.bonuses.forEach(function(b) {
+      if (b.value > 0) breakdownHtml += '<div class="score-row"><span class="label">' + b.label + '</span><span class="value plus">+' + b.value + '</span></div>';
+      else breakdownHtml += '<div class="score-row"><span class="label">' + b.label + '</span><span class="value" style="color:#6e7681;">0</span></div>';
+    });
+    if (r.deductions) r.deductions.forEach(function(d) {
+      breakdownHtml += '<div class="score-row"><span class="label">' + d.label + '</span><span class="value minus">' + d.value + '</span></div>';
+    });
+    breakdownHtml += '<div class="score-row" style="border-top:1px solid #30363d; margin-top:4px; padding-top:6px;"><span class="label"><b>النتيجة</b></span><span class="value" style="color:#f0b90b; font-size:14px;">' + r.explodeScore + '%</span></div></div>';
+  }
+  
+  const allSig = Object.values(sig).filter(function(s) { return s && s.score > 0; });
+  const strongCount = allSig.filter(function(s) { return s.score >= 70; }).length;
+  const totalSig = r.totalIndicators || (isFutures ? 23 : 20);
+  
+  const eta = calculateETA(r);
+  
+  let tokenClass = 'explode';
+  if (isPump) tokenClass = 'pump' + (r.explodeScore >= 85 ? ' mega-pump' : '');
+  else if (isEarly) tokenClass = 'early' + (r.levelClass === 'elite-early' ? ' elite-early' : '');
+  else if (isShort) tokenClass = 'dump' + (r.levelClass === 'elite-dump' ? ' elite-dump' : '');
+  else tokenClass = 'explode ' + r.levelClass;
+  
+  /* Countdown */
+  const countdown = !isPump ? '<div class="countdown-timer ' + (isShort ? 'dump-timer' : '') + ' ' + (isEarly ? 'early-timer' : '') + '" data-eta="' + eta.seconds + '" data-symbol="' + r.symbol + '" data-price="' + r.price + '" data-direction="' + r.direction + '">' +
+      '<div class="countdown-header">' +
+        '<span>⏱️ الوقت المتوقع</span>' +
+        '<span class="countdown-confidence">🎯 ' + eta.confidence + '%</span>' +
+      '</div>' +
+      '<div class="countdown-display">' +
+        '<div class="countdown-time">--:--</div>' +
+        '<div class="countdown-label">' + eta.label + '</div>' +
+      '</div>' +
+      '<div class="countdown-bar"><div class="countdown-bar-fill" style="width:0%"></div></div>' +
+      '<div class="countdown-footer">' +
+        '<span>📊 ' + eta.reason + '</span>' +
+        '<span class="countdown-status">⏳ جاري العد...</span>' +
+      '</div>' +
+    '</div>' : '';
+  
+  const recEmoji = isPump ? '🚀' : (isShort ? '🔴' : (isEarly ? '🎯' : (r.explodeScore >= 92 ? '💎' : r.explodeScore >= 85 ? '🚀' : '🔥')));
+  
+  /* Strategy */
+  const strategyHtml = '<div class="strategy ' + (isShort ? 'dump-strategy' : '') + ' ' + (isEarly ? 'early-strategy' : '') + ' ' + (isPump ? 'pump-strategy' : '') + '">' +
+    '<div class="strategy-item"><span class="strategy-label">📍 دخول:</span> <span class="strategy-value entry">$' + fmt(r.entry) + '</span></div>' +
+    '<div class="strategy-item"><span class="strategy-label">🎯 ' + (isShort ? '-3%' : (isEarly || isPump ? '+5%' : '+3%')) + ':</span> <span class="strategy-value ' + (isShort ? 'target-short' : 'target') + '">$' + fmt(r.target1) + '</span></div>' +
+    '<div class="strategy-item"><span class="strategy-label">🎯 ' + (isShort ? '-7%' : (isEarly || isPump ? '+10%' : '+7%')) + ':</span> <span class="strategy-value ' + (isShort ? 'target-short' : 'target') + '">$' + fmt(r.target2) + '</span></div>' +
+    '<div class="strategy-item"><span class="strategy-label">🚀 ' + (isShort ? '-15%' : (isEarly || isPump ? '+20%' : '+15%')) + ':</span> <span class="strategy-value ' + (isShort ? 'target-short' : 'target') + '">$' + fmt(r.target3) + '</span></div>' +
+    '<div class="strategy-item" style="grid-column:span 2;"><span class="strategy-label">🛑 وقف:</span> <span class="strategy-value ' + (isShort ? 'stop-short' : 'stop') + '">$' + fmt(r.stop) + ' (' + (isShort ? '+1.8%' : (isEarly || isPump ? '-2.5%' : '-1.8%')) + ')</span></div>' +
+  '</div>';
+  
+  /* Signals Groups */
+  const signalsHtml = isPump ? 
+    ('<div class="explode-signals pump-signals"><div class="explode-signals-title pump-title"><span>🚀 Pump Indicators</span><span>' + strongCount + '/5 قوي</span></div>' +
+      sigRow('📊','حجم شاذ', sig.whale) +
+      sigRow('⚡','حركة السعر', sig.obv) +
+      sigRow('💰','ضغط الشراء', sig.taker) +
+      sigRow('🐳','صفقات كبيرة', sig.largeTrades) +
+      sigRow('📊','B/A', sig.orderBook) +
+      warningsHtml + '</div>') :
+    (isShort ?
+      ('<div class="explode-signals dump-signals"><div class="explode-signals-title dump-title"><span>⚡ 23 مؤشر</span><span>' + strongCount + '/' + totalSig + '</span></div>' +
+        sigRow('📉','بصمة الانهيار', sig.whale) +
+        sigRow('📊','دفتر الأوامر', sig.orderBook) +
+        sigRow('💰','صفقات كبيرة', sig.largeTrades) +
+        sigRow('⚡','ضغط البيع', sig.taker) +
+        sigRow('📊','OBV', sig.obv) +
+        sigRow('💎','أموال ذكية', sig.smartMoney) +
+        sigRow('💸','Funding', sig.funding) +
+        sigRow('📊','OI', sig.openInt) +
+        sigRow('🐻','المحافظ', sig.topTrader) +
+        warningsHtml + gatesHtml + '</div>') :
+      ('<div class="explode-signals ' + (isEarly ? 'early-signals' : '') + '"><div class="explode-signals-title ' + (isEarly ? 'early-title' : '') + '"><span>⚡ ' + totalSig + ' مؤشر</span><span>' + strongCount + '/' + totalSig + '</span></div>' +
+        sigRow('🐋','بصمة الحوت', sig.whale) +
+        sigRow('🐋','دفتر الأوامر', sig.orderBook) +
+        sigRow('💰','صفقات كبيرة', sig.largeTrades) +
+        sigRow('⚡','ضغط الشراء', sig.taker) +
+        sigRow('📊','OBV', sig.obv) +
+        sigRow('💎','أموال ذكية', sig.smartMoney) +
+        sigRow('🔒','الانضغاط', sig.compression) +
+        (isFutures ? sigRow('💸','Funding', sig.funding) + sigRow('📊','OI', sig.openInt) + sigRow('🐳','المحافظ', sig.topTrader) : '') +
+        warningsHtml + gatesHtml + '</div>'));
+  
+  return '<div class="token ' + tokenClass + '">' +
+    '<div class="token-header">' +
+      '<div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">' +
+        '<span class="rank" style="background:' + color + ';">' + rank + '</span>' +
+        '<span class="token-name">' + r.name + '</span>' +
+        '<span class="explode-badge ' + r.levelClass + '">' + r.level + '</span>' +
+        confBadge + btBadge +
+      '</div>' +
+      '<span class="token-symbol">' + r.symbol + '</span>' +
+    '</div>' +
+    
+    '<div style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:8px;">' + dirBadge + timingBadge + '</div>' +
+    
+    backtestAlert +
+    countdown +
+    
+    '<div class="timing-banner" style="background:linear-gradient(90deg,' + color + '33,transparent); border-right:3px solid ' + color + ';">' + r.timing + '</div>' +
+    
+    '<div class="token-stats">' +
+      '<div><span class="stat-name">💰:</span> <span class="stat-val">$' + fmt(r.price) + '</span></div>' +
+      '<div><span class="stat-name">📈:</span> <span class="stat-val ' + changeClass + '">' + sign + r.change.toFixed(2) + '%</span></div>' +
+      (isFutures ? '<div><span class="stat-name">💸 Funding:</span> <span class="stat-val ' + (r.fundingRate < 0 ? 'up' : 'down') + '">' + (r.fundingRate || 0).toFixed(3) + '%</span></div>' : '') +
+      (isFutures && r.topTraderRatio ? '<div><span class="stat-name">🐳 Top L/S:</span> <span class="stat-val hot">' + r.topTraderRatio.toFixed(2) + '</span></div>' : '') +
+      (r.whaleCandles > 0 ? '<div><span class="stat-name">🐋 بصمة:</span> <span class="stat-val hot">' + r.whaleCandles + '</span></div>' : '') +
+      '<div><span class="stat-name">📊 B/A:</span> <span class="stat-val ' + (r.bidAskRatio >= 1 ? 'up' : 'down') + '">' + r.bidAskRatio.toFixed(2) + '</span></div>' +
+    '</div>' +
+    
+    '<div class="explode-meter ' + tokenClass + '">' +
+      '<div class="explode-meter-label">🎯 ' + (isPump ? 'Pump Probability' : (isShort ? 'Short Probability' : (isEarly ? 'قبل الانفجار' : 'احتمال الانفجار'))) + '</div>' +
+      '<div class="explode-meter-value">' + r.explodeScore + '%</div>' +
+      '<div class="explode-meter-bar"><div class="explode-meter-fill" style="width:' + r.explodeScore + '%"></div></div>' +
+      '<div class="explode-meter-info">' +
+        '<span>💎 ' + strongCount + '/' + totalSig + ' قوي</span>' +
+        '<span>🎯 ' + r.confidence + '%</span>' +
+      '</div>' +
+    '</div>' +
+    
+    signalsHtml +
+    breakdownHtml +
+    
+    (r.backtest && r.backtest.total > 0 ? 
+      '<div class="backtest-box ' + (parseFloat(r.backtest.winRate) >= 55 ? 'good' : parseFloat(r.backtest.winRate) < 40 ? 'bad' : '') + '">' +
+        '<div class="backtest-title">📊 Backtest — ' + r.backtest.total + ' إشارة:</div>' +
+        '<div class="backtest-row"><span class="label">النجاح:</span><span class="value ' + (parseFloat(r.backtest.winRate) >= 50 ? 'win' : 'loss') + '">' + r.backtest.winRate + '%</span></div>' +
+        '<div class="backtest-row"><span class="label">رابحة:</span><span class="value win">' + r.backtest.wins + ' ✅</span></div>' +
+        '<div class="backtest-row"><span class="label">خاسرة:</span><span class="value loss">' + r.backtest.losses + ' ❌</span></div>' +
+      '</div>' : '') +
+    
+    '<div class="rec-box ' + (isPump ? 'pump' : (isShort ? (r.levelClass === 'elite-dump' ? 'elite-dump' : 'dump') : (isEarly ? 'early' : (r.levelClass === 'elite' ? 'elite' : r.levelClass === 'ultra' ? 'ultra' : 'explode')))) + '">' +
+      '<span class="rec-emoji">' + recEmoji + '</span>' +
+      '<div><div class="rec-title">' + r.level + '</div>' +
+      '<div class="rec-score">' + strongCount + '/' + totalSig + ' | ثقة: ' + r.confidence + '%' + (r.backtest && r.backtest.total > 0 ? ' | BT: ' + r.backtest.winRate + '%' : '') + '</div></div>' +
+    '</div>' +
+    
+    strategyHtml +
+  '</div>';
+}
+
+function calculateETA(r) {
+  if (r.timing_type === 'early') {
+    return { seconds: 1800, confidence: 75, label: '🔥 انفجار خلال 30 دقيقة', reason: 'مرحلة تجميع — فرصة ذهبية' };
+  }
+  if (r.timing_type === 'pump') {
+    return { seconds: 180, confidence: 70, label: '🚀 Pump فوري!', reason: 'حجم شاذ — انفجار جاري' };
+  }
+  const score = r.explodeScore;
+  let seconds;
+  if (score >= 92) seconds = 90;
+  else if (score >= 85) seconds = 180;
+  else if (score >= 75) seconds = 480;
+  else if (score >= 65) seconds = 900;
+  else seconds = 1800;
+  
+  let label;
+  if (seconds <= 180) label = '⚡ انفجار وشيك';
+  else if (seconds <= 600) label = '🔥 انفجار قريب';
+  else if (seconds <= 1200) label = '⏰ قريب';
+  else label = '⏳ مراقبة';
+  
+  return { seconds: seconds, confidence: Math.max(60, r.confidence), label: label, reason: r.timing };
+}
+
+/* ============ Countdown Timers ============ */
+function startAllCountdowns() {
+  Object.values(activeTimers).forEach(function(t) {
+    if (t.interval) clearInterval(t.interval);
+    if (t.verifyInterval) clearInterval(t.verifyInterval);
+  });
+  activeTimers = {};
+  
+  document.querySelectorAll('.countdown-timer').forEach(function(el) {
+    const symbol = el.dataset.symbol;
+    const direction = el.dataset.direction || 'LONG';
+    const initialSeconds = parseInt(el.dataset.eta);
+    const initialPrice = parseFloat(el.dataset.price);
+    
+    const timeEl = el.querySelector('.countdown-time');
+    const barEl = el.querySelector('.countdown-bar-fill');
+    const statusEl = el.querySelector('.countdown-status');
+    const labelEl = el.querySelector('.countdown-label');
+    const footerLeft = el.querySelector('.countdown-footer span:first-child');
+    
+    let remaining = initialSeconds;
+    let phase = 'countdown';
+    let verifyCountdown = 60;
+    
+    const updateTimer = function() {
+      if (phase === 'countdown') {
+        if (remaining <= 0) {
+          phase = 'verifying';
+          verifyCountdown = 60;
+          labelEl.textContent = '🔍 جاري التحقق...';
+          labelEl.style.color = '#f0b90b';
+          statusEl.textContent = '⏱️ فحص السعر...';
+          statusEl.style.color = '#f0b90b';
+          el.style.borderColor = '#f0b90b';
+          startPriceVerification(symbol, initialPrice, el, direction);
+          return;
+        }
+        remaining--;
+        const mins = Math.floor(remaining / 60);
+        const secs = remaining % 60;
+        timeEl.textContent = String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
+        const progress = ((initialSeconds - remaining) / initialSeconds) * 100;
+        barEl.style.width = progress + '%';
+        
+        if (remaining <= 60) { timeEl.style.color = '#f85149'; statusEl.textContent = '⚡ اقترب!'; statusEl.style.color = '#f85149'; }
+        else if (remaining <= 180) { timeEl.style.color = '#f0b90b'; statusEl.textContent = '🔥 اقترب'; statusEl.style.color = '#f0b90b'; }
+        else if (remaining <= 600) { timeEl.style.color = '#a371f7'; statusEl.textContent = '⏰ اقترب'; statusEl.style.color = '#a371f7'; }
+      } else if (phase === 'verifying') {
+        verifyCountdown--;
+        timeEl.textContent = verifyCountdown + 's';
+        const progress = ((60 - verifyCountdown) / 60) * 100;
+        barEl.style.width = progress + '%';
+        barEl.style.background = 'linear-gradient(90deg, #f0b90b, #3fb950)';
+        if (verifyCountdown <= 0) {
+          phase = 'result';
+          if (activeTimers[symbol]) clearInterval(activeTimers[symbol].interval);
+          finalizeVerification(symbol, el, direction, initialPrice);
+        }
+      }
+    };
+    updateTimer();
+    const interval = setInterval(updateTimer, 1000);
+    activeTimers[symbol] = { interval: interval, el: el, phase: 'countdown', initialPrice: initialPrice };
+  });
+}
+
+async function startPriceVerification(symbol, initialPrice, el, direction) {
+  const timeEl = el.querySelector('.countdown-time');
+  const labelEl = el.querySelector('.countdown-label');
+  const statusEl = el.querySelector('.countdown-status');
+  const footerLeft = el.querySelector('.countdown-footer span:first-child');
+  
+  let highestPrice = initialPrice;
+  let lowestPrice = initialPrice;
+  
+  const isFutures = scanMarket === 'futures';
+  const priceAPI = (isFutures ? FAPI + '/fapi/v1/ticker/price?symbol=' : SAPI + '/api/v3/ticker/price?symbol=') + symbol;
+  
+  const verifyInterval = setInterval(async function() {
+    try {
+      const res = await fetch(priceAPI);
+      const data = await res.json();
+      const currentPrice = parseFloat(data.price);
+      if (currentPrice > highestPrice) highestPrice = currentPrice;
+      if (currentPrice < lowestPrice) lowestPrice = currentPrice;
+      
+      const changeFromStart = ((currentPrice - initialPrice) / initialPrice) * 100;
+      const maxChange = ((highestPrice - initialPrice) / initialPrice) * 100;
+      const minChange = ((lowestPrice - initialPrice) / initialPrice) * 100;
+      
+      footerLeft.textContent = '📊 $' + currentPrice.toFixed(6) + ' (' + (changeFromStart >= 0 ? '+' : '') + changeFromStart.toFixed(2) + '%)';
+      
+      if (direction === 'LONG' && maxChange >= 2) {
+        clearInterval(verifyInterval);
+        timeEl.textContent = '🚀';
+        timeEl.style.color = '#3fb950';
+        labelEl.textContent = '✅ انفجر! +' + maxChange.toFixed(2) + '%';
+        labelEl.style.color = '#3fb950';
+        statusEl.textContent = '🎉 انفجار!';
+        statusEl.style.color = '#3fb950';
+        el.style.borderColor = '#3fb950';
+        playEliteAlert();
+        if (activeTimers[symbol]) { clearInterval(activeTimers[symbol].interval); activeTimers[symbol].verified = true; }
+      } else if (direction === 'SHORT' && minChange <= -2) {
+        clearInterval(verifyInterval);
+        timeEl.textContent = '💥';
+        timeEl.style.color = '#f85149';
+        labelEl.textContent = '✅ انهار! ' + minChange.toFixed(2) + '%';
+        labelEl.style.color = '#f85149';
+        statusEl.textContent = '🎉 انهيار!';
+        statusEl.style.color = '#f85149';
+        el.style.borderColor = '#f85149';
+        playEliteAlert();
+        if (activeTimers[symbol]) { clearInterval(activeTimers[symbol].interval); activeTimers[symbol].verified = true; }
+      }
+    } catch (e) {}
+  }, 7000);
+  
+  if (activeTimers[symbol]) activeTimers[symbol].verifyInterval = verifyInterval;
+}
+
+function finalizeVerification(symbol, el, direction, initialPrice) {
+  const timer = activeTimers[symbol];
+  if (!timer || timer.verified) return;
+  
+  const isFutures = scanMarket === 'futures';
+  const priceAPI = (isFutures ? FAPI + '/fapi/v1/ticker/price?symbol=' : SAPI + '/api/v3/ticker/price?symbol=') + symbol;
+  
+  fetch(priceAPI)
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      const currentPrice = parseFloat(data.price);
+      const change = ((currentPrice - initialPrice) / initialPrice) * 100;
+      const timeEl = el.querySelector('.countdown-time');
+      const labelEl = el.querySelector('.countdown-label');
+      const statusEl = el.querySelector('.countdown-status');
+      
+      const isGood = (direction === 'LONG' && change >= 0.5) || (direction === 'SHORT' && change <= -0.5);
+      
+      if (isGood) {
+        timeEl.textContent = '✅';
+        timeEl.style.color = direction === 'SHORT' ? '#f85149' : '#3fb950';
+        labelEl.textContent = (change >= 0 ? '+' : '') + change.toFixed(2) + '%';
+        labelEl.style.color = direction === 'SHORT' ? '#f85149' : '#3fb950';
+        statusEl.textContent = '📈 نجح';
+        statusEl.style.color = direction === 'SHORT' ? '#f85149' : '#3fb950';
+      } else {
+        timeEl.textContent = '⏸️';
+        timeEl.style.color = '#8b949e';
+        labelEl.textContent = (change >= 0 ? '+' : '') + change.toFixed(2) + '%';
+        labelEl.style.color = '#8b949e';
+        statusEl.textContent = '⚠️ ثابت';
+        statusEl.style.color = '#8b949e';
+      }
+      
+      if (activeTimers[symbol]) {
+        clearInterval(activeTimers[symbol].verifyInterval);
+        activeTimers[symbol].verified = true;
+      }
+    })
+    .catch(function() {});
+}
+
+/* ============ Auto Scan ============ */
+function toggleAutoScan() {
+  const btn = document.getElementById('autoBtn');
+  const status = document.getElementById('autoStatus');
+  if (autoScanTimer) {
+    clearInterval(autoScanTimer);
+    autoScanTimer = null;
+    btn.textContent = '🔄 فحص تلقائي (10 د)';
+    btn.style.background = 'linear-gradient(135deg,#1f6feb,#58a6ff)';
+    status.textContent = '';
+  } else {
+    btn.textContent = '⏹️ إيقاف التلقائي';
+    btn.style.background = 'linear-gradient(135deg,#f85149,#d29922)';
+    runExplodeScanner();
+    autoScanTimer = setInterval(function() {
+      if (!isScanning && checkCooldown()) {
+        const now = new Date().toLocaleTimeString('ar-EG');
+        status.textContent = '⏱️ آخر فحص: ' + now;
+        runExplodeScanner();
+      }
+    }, 10 * 60 * 1000);
+  }
+}
+
+/* ============ Radar ============ */
+async function runRadar() {
+  const limit = document.getElementById('limitSelect').value;
+  showStatus('📡 جاري سحب البيانات...', 'loading');
+  document.getElementById('results').innerHTML = '';
+  try {
+    const apiBase = scanMarket === 'futures' ? FAPI : SAPI;
+    const tickerPath = scanMarket === 'futures' ? '/fapi/v1/ticker/24hr' : '/api/v3/ticker/24hr';
+    const res = await fetch(apiBase + tickerPath);
+    const data = await res.json();
+    const filtered = data
+      .filter(function(t) { return t.symbol.endsWith('USDT'); })
+      .filter(function(t) { return parseFloat(t.quoteVolume) > 5_000_000; })
+      .filter(function(t) { return !t.symbol.includes('_'); })
+      .sort(function(a, b) { return parseFloat(b.priceChangePercent) - parseFloat(a.priceChangePercent); })
+      .slice(0, parseInt(limit));
+    currentResults = [];
+    let html = '';
+    filtered.forEach(function(t, i) {
+      const a = analyzeToken(t);
+      currentResults.push(a);
+      html += renderToken(a, i + 1);
+    });
+    document.getElementById('results').innerHTML = html;
+    showStatus('✅ تم', 'success');
+    setTimeout(hideStatus, 1500);
+  } catch (err) { showStatus('❌ خطأ: ' + err.message, 'error'); }
+}
+
+async function analyzeSingle() {
+  const sym = document.getElementById('symbolInput').value.trim().toUpperCase();
+  if (!sym) return;
+  const fullSym = sym.endsWith('USDT') ? sym : sym + 'USDT';
+  showStatus('🔍 جاري التحليل...', 'loading');
+  document.getElementById('results').innerHTML = '';
+  
+  try {
+    const apiBase = scanMarket === 'futures' ? FAPI : SAPI;
+    const tickerPath = scanMarket === 'futures' ? '/fapi/v1/ticker/24hr?symbol=' : '/api/v3/ticker/24hr?symbol=';
+    const res = await fetch(apiBase + tickerPath + fullSym);
+    const data = await res.json();
+    if (data.code) { showStatus('❌ غير موجودة', 'error'); return; }
+    
+    const promises = [
+      analyzeExplosionDeep(data).catch(function() { return null; }),
+      analyzeEarlyDeep(data).catch(function() { return null; })
+    ];
+    
+    if (scanMarket === 'futures') {
+      promises.push(analyzeDumpDeep(data).catch(function() { return null; }));
+    }
+    
+    const results = await Promise.all(promises);
+    let html = '';
+    let rank = 1;
+    results.forEach(function(r) {
+      if (r) html += renderExplodeToken(r, rank++);
+    });
+    
+    if (!html) {
+      const a = analyzeToken(data);
+      html = renderToken(a, 1, true);
+    }
+    
+    document.getElementById('results').innerHTML = html;
+    setTimeout(function() { startAllCountdowns(); }, 100);
+    showStatus('✅ تم', 'success');
+    setTimeout(hideStatus, 1500);
+  } catch (err) { showStatus('❌ خطأ', 'error'); }
+}
+
+async function analyzeEarlyDeep(t) {
+  const symbol = t.symbol;
+  const change24h = parseFloat(t.priceChangePercent);
+  
+  if (change24h > 2.5) return null;
+  if (change24h < -5) return null;
+  
+  const isFutures = scanMarket === 'futures';
+  
+  const results = await Promise.all([
+    getKlines(symbol, '1m', 200),
+    getKlines(symbol, '5m', 100),
+    getDepth(symbol),
+    getTrades(symbol),
+    ...(isFutures ? [
+      safeFetch(FAPI + '/fapi/v1/premiumIndex?symbol=' + symbol),
+      safeFetch(FAPI + '/futures/data/topLongShortPositionRatio?symbol=' + symbol + '&period=5m&limit=30')
+    ] : [])
+  ]);
+  
+  const k1m = results[0], k5m = results[1], orderBook = results[2], trades = results[3];
+  const fundingData = isFutures ? results[4] : null;
+  const topLS = isFutures ? results[5] : null;
+  
+  if (!Array.isArray(k1m) || k1m.length < 30) return null;
+  
+  const closes1 = k1m.map(function(k) { return parseFloat(k[4]); });
+  const highs1 = k1m.map(function(k) { return parseFloat(k[2]); });
+  const lows1 = k1m.map(function(k) { return parseFloat(k[3]); });
+  const opens1 = k1m.map(function(k) { return parseFloat(k[1]); });
+  const vols1 = k1m.map(function(k) { return parseFloat(k[5]); });
+  const trades1 = k1m.map(function(k) { return parseFloat(k[8]); });
+  const takerBuy1 = k1m.map(function(k) { return parseFloat(k[9]); });
+  
+  const price = closes1[closes1.length - 1];
+  const vol24h = parseFloat(t.quoteVolume);
+  
+  const avgVol20 = vols1.slice(-20).reduce(function(a,b) { return a+b; }, 0) / 20;
+  const avgTrades20 = trades1.slice(-20).reduce(function(a,b) { return a+b; }, 0) / 20;
+  let whaleCandles = 0;
+  for (let i = closes1.length - 20; i < closes1.length; i++) {
+    const body = Math.abs(closes1[i] - opens1[i]);
+    const range = highs1[i] - lows1[i];
+    if (body / (range || 1) < 0.4 && vols1[i] > avgVol20 * 1.3 && trades1[i] > avgTrades20 * 1.2 && range / price < 0.012) whaleCandles++;
+  }
+  
+  if (whaleCandles < 3) return null;
+  
+  const whaleScore = whaleCandles >= 5 ? 100 : whaleCandles >= 4 ? 85 : 70;
+  
+  const last30High = Math.max.apply(null, highs1.slice(-30));
+  const last30Low = Math.min.apply(null, lows1.slice(-30));
+  const compression15 = (Math.max.apply(null, highs1.slice(-15)) - Math.min.apply(null, lows1.slice(-15))) / Math.min.apply(null, lows1.slice(-15));
+  const compression30 = (last30High - last30Low) / last30Low;
+  const compressionRatio = compression15 / (compression30 || 1);
+  const compressionScore = compressionRatio < 0.5 && compression15 < 0.015 ? 100 :
+                           compressionRatio < 0.6 && compression15 < 0.02 ? 85 :
+                           compressionRatio < 0.7 ? 70 : 50;
+  
+  let obv = 0;
+  const obvHistory = [];
+  for (let i = 1; i < closes1.length; i++) {
+    if (closes1[i] > closes1[i-1]) obv += vols1[i];
+    else if (closes1[i] < closes1[i-1]) obv -= vols1[i];
+    obvHistory.push(obv);
+  }
+  const obvChange = obvHistory.length > 20 
+    ? (obvHistory[obvHistory.length-1] - obvHistory[obvHistory.length-15]) / Math.abs(obvHistory[obvHistory.length-15] || 1) : 0;
+  const obvScore = obvChange > 0.15 ? 100 : obvChange > 0.05 ? 80 : obvChange > 0 ? 60 : 30;
+  
+  const avgVol30 = vols1.slice(-30, -10).reduce(function(a,b) { return a+b; }, 0) / 20;
+  const avgVol10 = vols1.slice(-10).reduce(function(a,b) { return a+b; }, 0) / 10;
+  const dryUpRatio = avgVol10 / (avgVol30 || 1);
+  const dryUpScore = dryUpRatio < 0.55 ? 100 : dryUpRatio < 0.7 ? 85 : dryUpRatio < 0.85 ? 70 : 50;
+  
+  let dojiCount = 0;
+  for (let i = closes1.length - 15; i < closes1.length; i++) {
+    const body = Math.abs(closes1[i] - opens1[i]);
+    const range = highs1[i] - lows1[i];
+    if (range > 0 && body / range < 0.3) dojiCount++;
+  }
+  const silentScore = dojiCount >= 5 ? 100 : dojiCount >= 3 ? 85 : dojiCount >= 2 ? 65 : 40;
+  
+  let bidAskRatio = 1;
+  if (orderBook && orderBook.bids && orderBook.asks) {
+    const bidVol = orderBook.bids.reduce(function(sum, b) { return sum + parseFloat(b[0]) * parseFloat(b[1]); }, 0);
+    const askVol = orderBook.asks.reduce(function(sum, a) { return sum + parseFloat(a[0]) * parseFloat(a[1]); }, 0);
+    bidAskRatio = bidVol / (askVol || 1);
+  }
+  const orderBookScore = bidAskRatio > 1.4 ? 100 : bidAskRatio > 1.2 ? 85 : bidAskRatio > 1 ? 65 : 40;
+  
+  let largeBuys = 0;
+  if (Array.isArray(trades) && trades.length > 0) {
+    const values = trades.map(function(tr) { return parseFloat(tr.p) * parseFloat(tr.q); });
+    const avgV = values.reduce(function(a,b) { return a+b; }, 0) / values.length;
+    trades.forEach(function(tr) {
+      if (parseFloat(tr.p) * parseFloat(tr.q) > avgV * 6 && tr.m === false) largeBuys++;
+    });
+  }
+  const largeScore = largeBuys >= 6 ? 100 : largeBuys >= 3 ? 85 : largeBuys >= 1 ? 60 : 40;
+  
+  const recentBuy = takerBuy1.slice(-15).reduce(function(a,b) { return a+b; }, 0);
+  const recentVol = vols1.slice(-15).reduce(function(a,b) { return a+b; }, 0);
+  const takerBuyRatio = recentVol > 0 ? recentBuy / recentVol : 0.5;
+  const takerScore = takerBuyRatio > 0.6 ? 100 : takerBuyRatio > 0.53 ? 85 : takerBuyRatio > 0.5 ? 65 : 40;
+  
+  const ema10 = calcEMA(closes1, 10);
+  const ema20 = calcEMA(closes1, 20);
+  const microScore = ema10 > ema20 ? 85 : 50;
+  
+  let supportTouches = 0;
+  const supportLevel = Math.min.apply(null, lows1.slice(-30));
+  const tol = supportLevel * 0.001;
+  for (let i = lows1.length - 60; i < lows1.length; i++) {
+    if (Math.abs(lows1[i] - supportLevel) < tol) supportTouches++;
+  }
+  const supportScore = supportTouches >= 3 && supportTouches <= 7 ? 100 : supportTouches >= 2 ? 80 : 50;
+  
+  let fundingScore = 50, fundingRate = 0;
+  if (isFutures && fundingData && fundingData.lastFundingRate !== undefined) {
+    fundingRate = parseFloat(fundingData.lastFundingRate) * 100;
+    if (fundingRate < -0.02) fundingScore = 100;
+    else if (fundingRate < 0) fundingScore = 85;
+    else if (fundingRate < 0.01) fundingScore = 70;
+    else fundingScore = 40;
+  }
+  
+  let topTraderScore = 50, topTraderRatio = 1;
+  if (isFutures && Array.isArray(topLS) && topLS.length >= 2) {
+    topTraderRatio = parseFloat(topLS[topLS.length - 1].longShortRatio);
+    if (topTraderRatio > 1.5) topTraderScore = 100;
+    else if (topTraderRatio > 1.2) topTraderScore = 85;
+    else if (topTraderRatio > 1) topTraderScore = 65;
+    else topTraderScore = 40;
+  }
+  
+  let explodeScore = Math.round(
+    whaleScore * 0.20 +
+    compressionScore * 0.12 +
+    obvScore * 0.10 +
+    dryUpScore * 0.08 +
+    silentScore * 0.08 +
+    orderBookScore * 0.08 +
+    largeScore * 0.08 +
+    takerScore * 0.08 +
+    microScore * 0.05 +
+    supportScore * 0.05 +
+    fundingScore * 0.05 +
+    topTraderScore * 0.03
+  );
+  
+  const baseScore = explodeScore;
+  const totalIndicators = isFutures ? 12 : 10;
+  const allScores = [whaleScore, compressionScore, obvScore, dryUpScore, silentScore, orderBookScore, largeScore, takerScore, microScore, supportScore];
+  if (isFutures) allScores.push(fundingScore, topTraderScore);
+  const highCount = allScores.filter(function(s) { return s >= 70; }).length;
+  const confidence = Math.round((highCount / totalIndicators) * 100);
+  
+  if (explodeScore >= 85 && confidence >= 80) {
+    return {
+      symbol: symbol, name: symbol.replace('USDT',''),
+      price: price, change: change24h, volume: vol24h,
+      explodeScore: explodeScore, baseScore: baseScore, confidence: confidence,
+      level: '🎯 قبل الانفجار — فرصة ذهبية', levelClass: 'elite-early',
+      timing: '⚡ السعر منخفض — ادخل!',
+      warnings: ['🎯 فرصة نادرة'], bonuses: [], deductions: [], gatesApplied: [],
+      whaleCandles: whaleCandles, obvChange: obvChange, bidAskRatio: bidAskRatio,
+      largeBuys: largeBuys, takerBuyRatio: takerBuyRatio,
+      fundingRate: fundingRate, topTraderRatio: topTraderRatio,
+      backtest: { wins: 0, losses: 0, total: 0, winRate: '0', avgReturn: '0' },
+      direction: 'LONG', market: scanMarket, timing_type: 'early', totalIndicators: totalIndicators,
+      entry: price, target1: price * 1.05, target2: price * 1.10, target3: price * 1.20, stop: price * 0.975,
+      signals: {
+        whale: { score: Math.round(whaleScore), label: whaleCandles + ' شمعة' },
+        compression: { score: Math.round(compressionScore), label: '×' + dryUpRatio.toFixed(2) },
+        obv: { score: Math.round(obvScore), label: (obvChange*100).toFixed(0) + '%' },
+        dryUp: { score: Math.round(dryUpScore), label: '×' + dryUpRatio.toFixed(2) },
+        silent: { score: Math.round(silentScore), label: dojiCount + ' دوجي' },
+        orderBook: { score: Math.round(orderBookScore), label: 'B/A ' + bidAskRatio.toFixed(2) },
+        largeTrades: { score: Math.round(largeScore), label: largeBuys + ' شراء' },
+        taker: { score: Math.round(takerScore), label: (takerBuyRatio*100).toFixed(0) + '%' },
+        funding: { score: Math.round(fundingScore), label: fundingRate.toFixed(3) + '%' },
+        topTrader: { score: Math.round(topTraderScore), label: topTraderRatio.toFixed(2) }
+      }
+    };
+  }
+  return null;
+}
+
+/* ============ Helpers ============ */
+function analyzeToken(t) {
+  const price = parseFloat(t.lastPrice);
+  const change = parseFloat(t.priceChangePercent);
+  const high = parseFloat(t.highPrice);
+  const low = parseFloat(t.lowPrice);
+  const volume = parseFloat(t.quoteVolume);
+  let score = 50;
+  if (change > 15) score += 25; else if (change > 8) score += 18; else if (change > 3) score += 12; else if (change > 0) score += 5;
+  if (volume > 100_000_000) score += 15; else if (volume > 50_000_000) score += 10;
+  score = Math.max(0, Math.min(100, score));
+  let rec, emoji;
+  if (score >= 75) { rec = 'شراء قوي'; emoji = '🟢'; }
+  else if (score >= 60) { rec = 'شراء'; emoji = '🟡'; }
+  else if (score >= 45) { rec = 'انتظار'; emoji = '⚪'; }
+  else { rec = 'بيع'; emoji = '🔴'; }
+  return { symbol: t.symbol, name: t.symbol.replace('USDT',''), price: price, change: change, high: high, low: low, volume: volume, score: score, recommendation: rec, emoji: emoji };
+}
+
+function renderToken(a, rank, isSingle) {
+  const cls = isSingle ? 'single' : 'radar';
+  const c = a.change >= 0 ? 'up' : 'down';
+  const s = a.change >= 0 ? '+' : '';
+  function fmt(n) { return n.toLocaleString('en-US', { maximumFractionDigits: 8 }); }
+  return '<div class="token ' + cls + '">' +
+    '<div class="token-header"><div><span class="rank">' + rank + '</span><span class="token-name">' + a.name + '</span></div><span class="token-symbol">' + a.symbol + '</span></div>' +
+    '<div class="token-stats">' +
+      '<div><span class="stat-name">💰:</span> <span class="stat-val">$' + fmt(a.price) + '</span></div>' +
+      '<div><span class="stat-name">📈:</span> <span class="stat-val ' + c + '">' + s + a.change.toFixed(2) + '%</span></div>' +
+      '<div><span class="stat-name">🔺:</span> <span class="stat-val">$' + fmt(a.high) + '</span></div>' +
+      '<div><span class="stat-name">🔻:</span> <span class="stat-val">$' + fmt(a.low) + '</span></div>' +
+    '</div>' +
+    '<div class="rec-box" style="background:#23863633;border:1px solid #2ea043;">' +
+      '<span class="rec-emoji">' + a.emoji + '</span>' +
+      '<div><div class="rec-title">' + a.recommendation + '</div><div class="rec-score">' + a.score + '/100</div></div>' +
+    '</div>' +
+  '</div>';
+}
+
+function renderHistory() {
+  const box = document.getElementById('historyContainer');
+  if (history.length === 0) { box.innerHTML = '<div class="empty">لا يوجد سجل</div>'; return; }
+  box.innerHTML = history.map(function(h) {
+    const d = new Date(h.date);
+    function fmt(n) { return n.toLocaleString('en-US', { maximumFractionDigits: 8 }); }
+    const s = h.change >= 0 ? '+' : '';
+    const c = h.change >= 0 ? 'up' : 'down';
+    const isShort = h.direction === 'SHORT';
+    const isEarly = h.timing_type === 'early';
+    const isPump = h.timing_type === 'pump';
+    let cls = isPump ? 'pump-item' : (isShort ? 'dump-item' : (isEarly ? 'early-item' : ''));
+    let emoji = isPump ? '🚀' : (isShort ? '🔴' : (isEarly ? '🎯' : '🟢'));
+    let marketTag = h.market === 'futures' ? '🔴 FUT' : '🟢 SPOT';
+    return '<div class="history-item ' + cls + '">' +
+      '<div class="history-header"><span class="history-symbol">' + h.symbol + ' ' + emoji + ' <span style="font-size:10px; color:#6e7681;">' + marketTag + '</span></span><span class="history-score">' + h.score + '/100</span></div>' +
+      '<div class="history-details">' +
+        '<div><span class="history-label">السعر:</span> <span class="history-value">$' + fmt(h.price) + '</span></div>' +
+        '<div><span class="history-label">التغير:</span> <span class="history-value ' + c + '">' + s + h.change.toFixed(2) + '%</span></div>' +
+      '</div>' +
+      '<div class="history-date">' + d.toLocaleString('ar-EG') + '</div>' +
+    '</div>';
+  }).join('');
+}
+
+/* ============ Wallets ============ */
+function saveWallets() { localStorage.setItem('trackedWallets', JSON.stringify(wallets)); }
+function renderWallets() {
+  const box = document.getElementById('addressesBox');
+  document.getElementById('whaleCount').textContent = '📊 عدد المحافظ: ' + wallets.length;
+  if (wallets.length === 0) { box.innerHTML = '<div class="empty" style="padding:15px; font-size:12px;">لا توجد محافظ</div>'; return; }
+  box.innerHTML = wallets.map(function(w, i) {
+    return '<div class="address-chip"><span class="net-badge">' + w.network + '</span><span class="addr-text" title="' + w.address + '">' + w.address + '</span><span class="remove" onclick="removeWallet(' + i + ')">×</span></div>';
+  }).join('');
+}
+function addWallet() {
+  const addr = document.getElementById('walletAddress').value.trim();
+  const net = document.getElementById('walletNetwork').value;
+  if (!addr || addr.length < 20) { alert('⚠️ العنوان غير صالح'); return; }
+  if (wallets.some(function(w) { return w.address.toLowerCase() === addr.toLowerCase(); })) { alert('⚠️ مضافة'); return; }
+  wallets.push({ address: addr, network: net, addedAt: new Date().toISOString() });
+  saveWallets(); renderWallets();
+  document.getElementById('walletAddress').value = '';
+}
+function removeWallet(i) { wallets.splice(i, 1); saveWallets(); renderWallets(); }
+function clearWallets() { if (!wallets.length || !confirm('مسح الكل؟')) return; wallets = []; saveWallets(); renderWallets(); }
+
+/* ============ Telegram Send ============ */
+async function sendToTelegram() {
+  const btn = document.getElementById('tgSendBtn');
+  const token = document.getElementById('tgBotToken').value.trim();
+  const chatId = document.getElementById('tgChatId').value.trim();
+  if (!token || !chatId) { showTgStatus('⚠️ أدخل البيانات', 'err'); return; }
+  if (!currentExplode.length) { showTgStatus('⚠️ لا توجد بيانات', 'err'); return; }
+  localStorage.setItem('tgBotToken', token);
+  localStorage.setItem('tgChatId', chatId);
+  btn.disabled = true;
+  showTgStatus('⏳ جاري الإرسال...', 'wait');
+  try {
+    const res = await fetch('https://api.telegram.org/bot' + token + '/sendMessage', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ chat_id: chatId, text: buildTelegramMessage(), parse_mode: 'HTML', disable_web_page_preview: true })
+    });
+    const data = await res.json();
+    if (data.ok) { showTgStatus('✅ تم!', 'ok'); setTimeout(function() { document.getElementById('tgStatus').style.display = 'none'; }, 5000); }
+    else showTgStatus('❌ ' + data.description, 'err');
+  } catch (err) { showTgStatus('❌ ' + err.message, 'err'); }
+  finally { btn.disabled = false; }
+}
+
+function buildTelegramMessage() {
+  const now = new Date().toLocaleString('ar-EG', { dateStyle: 'short', timeStyle: 'short' });
+  function fmt(n) { return n.toLocaleString('en-US', { maximumFractionDigits: 6 }); }
+  let msg = '🚀 <b>كاشف الانفجار V13 ULTIMATE</b>\n🕐 ' + now + '\n━━━━━━━━━━━━━━━━━━━\n\n';
+  if (currentExplode.length) {
+    msg += '⚡ <b>' + currentExplode.length + ' إشارة:</b>\n\n';
+    currentExplode.slice(0, 20).forEach(function(r, i) {
+      const s = r.change >= 0 ? '+' : '';
+      const isShort = r.direction === 'SHORT';
+      const isPump = r.timing_type === 'pump';
+      const isEarly = r.timing_type === 'early';
+      const emoji = isPump ? '🚀' : (isShort ? '🔴' : (isEarly ? '🎯' : '💎'));
+      msg += emoji + ' <b>' + (i + 1) + '. ' + r.name + '</b> <code>' + r.symbol + '</code>\n';
+      msg += '🎯 <b>' + r.explodeScore + '%</b> | ثقة: <b>' + r.confidence + '%</b>\n';
+      msg += '💰 $' + fmt(r.price) + ' | ' + s + r.change.toFixed(2) + '%\n';
+      msg += '📍 $' + fmt(r.entry) + ' | 🎯 $' + fmt(r.target1) + '\n';
+      msg += '───────────────────\n';
+    });
+  }
+  msg += '\n━━━━━━━━━━━━━━━━━━━\n🤖 V13 ULTIMATE';
+  return msg;
+}
+
+function showTgStatus(text, type) {
+  const s = document.getElementById('tgStatus');
+  s.textContent = text; s.className = 'tg-status ' + type;
+}
+
+/* ============ Tabs ============ */
+function switchTab(tab, ev) {
+  document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+  if (ev && ev.target) ev.target.classList.add('active');
+  ['explode','radar','whales','history'].forEach(function(t) {
+    document.getElementById('tab-' + t).style.display = t === tab ? 'block' : 'none';
+  });
+  document.getElementById('results').innerHTML = '';
+  hideStatus();
+  if (tab === 'history') renderHistory();
+  if (tab === 'whales') renderWallets();
+}
+
+function showStatus(text, type) {
+  const s = document.getElementById('status');
+  s.textContent = text; s.className = 'status ' + type;
+}
+function hideStatus() { document.getElementById('status').className = 'status'; }
+
+/* ============ Init ============ */
+document.addEventListener('DOMContentLoaded', function() {
+  const token = localStorage.getItem('tgBotToken');
+  const chat = localStorage.getItem('tgChatId');
+  if (token) document.getElementById('tgBotToken').value = token;
+  if (chat) document.getElementById('tgChatId').value = chat;
+  renderWallets();
+  
+  if ('Notification' in window && Notification.permission === 'default') {
+    Notification.requestPermission();
+  }
+  
+  setMarket('spot');
+  setMode('buy');
+});
+
+document.getElementById('symbolInput') && document.getElementById('symbolInput').addEventListener('keypress', function(e) { if (e.key === 'Enter') analyzeSingle(); });
+document.getElementById('walletAddress') && document.getElementById('walletAddress').addEventListener('keypress', function(e) { if (e.key === 'Enter') addWallet(); });
+document.getElementById('adviceModal') && document.getElementById('adviceModal').addEventListener('click', function(e) { if (e.target === this) closeAdvice(); });
+
+</script>
+</body>
+</html>
